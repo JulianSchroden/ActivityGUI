@@ -16,6 +16,45 @@ Activity::~Activity() {
 
 }
 
+void Activity::onScroll(int distance) {
+
+}
+
+void Activity::onClick() {
+
+}
+
+void Activity::onLongClick() {
+	// the default behaviour of onLongClick stops the current activity
+	stopActivity();
+}
+
+void Activity::setResult(ByteStack &bytes) {
+
+}
+
+void Activity::onActivityResult(ByteStack &result, int8_t key) {
+
+}
+
+void Activity::onStart() {
+	display.clearDisplay();
+	drawLayout();	
+}
+
+void Activity::onPause() {
+
+}
+
+void Activity::onResume() {
+	display.clearDisplay();
+	drawLayout();
+}
+
+void Activity::onDestroy() {
+
+}
+
 void Activity::startActivity(Activity *const activity) {
 	Runtime::startActivity(activity);
 }
@@ -68,46 +107,4 @@ void Activity::clearActivity(const int color, const boolean draw) {
 	if (draw) {
 		display.display();
 	}
-}
-
-
-void Activity::onScroll(int distance) {
-
-}
-
-void Activity::onClick() {
-
-}
-
-void Activity::onLongClick() {
-	// the default behaviour of onLongClick stops the current activity
-	stopActivity();
-}
-
-
-void Activity::setResult(ByteStack &bytes) {
-
-}
-
-void Activity::onActivityResult(ByteStack &result, int8_t key) {
-
-}
-
-
-void Activity::onStart() {
-	display.clearDisplay();
-	drawLayout();	
-}
-
-void Activity::onPause() {
-
-}
-
-void Activity::onResume() {
-	display.clearDisplay();
-	drawLayout();
-}
-
-void Activity::onDestroy() {
-
 }

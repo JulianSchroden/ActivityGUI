@@ -13,59 +13,7 @@
 #include <string>
 
 
-
 class Activity {
-    
-protected:
-	Adafruit_SSD1306 &display;
-	bool showTitleBar, showArrowHome;
-	String title;
-	int titleFontScale;
-	int titleBarHeight = 0;
-
-	bool areInterruptsEnbabled = true;
-
-	/**
-	 *  Starts a new activity by calling corresponding Runtime method
-	 *  @param activity   a pointer to an activity instance
-	 */
-	void startActivity(Activity *const activity);
-
-	/**
-	 *  Starts a new activity by calling corresponding Runtime method
-	 *  A flag is set to allow data to be transferred to the calling activity
-	 *  @param activity   a pointer to an activity instance
-	 *  @param key        an integer value between -128 and 127 to associate the returned data 
-	 */
-	void startActivityForResult(Activity *const activity, int8_t key);
-
-	/**
-	 *  Stops current activity by calling corresponding Runtime method
-	 *  Frees allocated memory
-	 */
-	void stopActivity();
-
-	/**
-	 *  Virtual method to draw the layout of an activity
-	 *  Needs to be implemented by all child classes to draw the layout onStart and onResume
-	 */ 
-	virtual void drawLayout();
-
-	/**
-	 *  Draws the titlebar to the top of the display
-	 *  @param title         a string which should be displayed as the title
-	 *  @param fontScale     integer value > 0 to modify the size of the titleBar text; tested with the values 1 and 2
-	 *  @param showArrowHome boolean value to choose if an arrow should indicate, that there is an upper activity
-	 *  @param draw          boolean value to choose if display buffer should be transferred to display
-	 */ 
-	void drawTitleBar(String title, int fontScale, bool showArrowHome, bool draw=false);
-
-	/**
-	 *  Clears the screen of the current activity
-	 *  @param color the fill color (BLACK|WHITE)
-	 *  @param draw  boolean value to choose if display buffer should be transferred to display
-	 */ 
-	void clearActivity(const int color=BLACK, const boolean draw=true);
 
 public:
     /**
@@ -132,6 +80,59 @@ public:
 	 *  Runtime callback which is called on an activity, when the user navigates to the previous activity
 	 */ 
 	virtual void onDestroy();
+
+protected:
+	/**
+	 *  Starts a new activity by calling corresponding Runtime method
+	 *  @param activity   a pointer to an activity instance
+	 */
+	void startActivity(Activity *const activity);
+
+	/**
+	 *  Starts a new activity by calling corresponding Runtime method
+	 *  A flag is set to allow data to be transferred to the calling activity
+	 *  @param activity   a pointer to an activity instance
+	 *  @param key        an integer value between -128 and 127 to associate the returned data 
+	 */
+	void startActivityForResult(Activity *const activity, int8_t key);
+
+	/**
+	 *  Stops current activity by calling corresponding Runtime method
+	 *  Frees allocated memory
+	 */
+	void stopActivity();
+
+	/**
+	 *  Virtual method to draw the layout of an activity
+	 *  Needs to be implemented by all child classes to draw the layout onStart and onResume
+	 */ 
+	virtual void drawLayout();
+
+	/**
+	 *  Draws the titlebar to the top of the display
+	 *  @param title         a string which should be displayed as the title
+	 *  @param fontScale     integer value > 0 to modify the size of the titleBar text; tested with the values 1 and 2
+	 *  @param showArrowHome boolean value to choose if an arrow should indicate, that there is an upper activity
+	 *  @param draw          boolean value to choose if display buffer should be transferred to display
+	 */ 
+	void drawTitleBar(String title, int fontScale, bool showArrowHome, bool draw=false);
+
+	/**
+	 *  Clears the screen of the current activity
+	 *  @param color the fill color (BLACK|WHITE)
+	 *  @param draw  boolean value to choose if display buffer should be transferred to display
+	 */ 
+	void clearActivity(const int color=BLACK, const boolean draw=true);
+
+protected:
+	Adafruit_SSD1306 &display;
+	String title;
+	bool showTitleBar;
+	int titleFontScale;
+	bool showArrowHome;
+	
+	int titleBarHeight = 0;
+	bool areInterruptsEnbabled = true;
 };
 
 #endif
