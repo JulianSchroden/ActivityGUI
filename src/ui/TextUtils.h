@@ -7,7 +7,7 @@
 #ifndef _TEXTUTILS_h
 #define _TEXTUTILS_h
 
-#include "Arduino.h"
+#include <string>
 
 class Dimension
 {
@@ -39,7 +39,7 @@ public:
     *  @param scale  the font scale
     *  @return a Dimension object
     */
-   static Dimension getTextBounds(String text, int scale)
+   static Dimension getTextBounds(std::string text, int scale)
    {
       return Dimension(text.length() * 6 * scale, 8 * scale);
    }

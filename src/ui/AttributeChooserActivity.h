@@ -12,6 +12,7 @@
 #include "../utils/AttributeChoice.h"
 #include "Activity.h"
 
+
 class AttributeChooserActivity : public Activity
 {
 private:
@@ -38,7 +39,7 @@ public:
     * indicate, that there is an upper activity
     */
    AttributeChooserActivity(std::vector<AttributeChoice> &items,
-                            String title,
+                            std::string title,
                             uint8_t selected = 0,
                             bool showTitleBar = false,
                             int titleFontScale = 2,

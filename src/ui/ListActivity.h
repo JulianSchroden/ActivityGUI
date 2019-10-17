@@ -12,6 +12,7 @@
 #include "Activity.h"
 #include "TextUtils.h"
 
+
 class ListActivity : public Activity
 {
 private:
@@ -30,7 +31,7 @@ private:
    const int indicatorWidth = 3;
 
 protected:
-   std::list<String> &listItems;
+   std::list<std::string> &listItems;
    int selectedItem = 0;  // index of the current selected item
 
    virtual void drawLayout();
@@ -65,8 +66,8 @@ public:
     *  @param showArrowHome    boolean value to choose if an arrow should
     * indicate, that there is an upper activity
     */
-   ListActivity(std::list<String> &items,
-                String title,
+   ListActivity(std::list<std::string> &items,
+                std::string title,
                 bool showTitleBar,
                 int titleFontScale,
                 bool showArrowHome = false);

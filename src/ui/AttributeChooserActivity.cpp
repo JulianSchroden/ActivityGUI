@@ -8,12 +8,12 @@
 
 AttributeChooserActivity::AttributeChooserActivity(
     std::vector<AttributeChoice> &items,
-    String title,
+    std::string title,
     uint8_t selected,
     bool showTitleBar,
     int titleFontScale,
     bool showArrowHome)
-    : Activity(title, showTitleBar, titleFontScale, showArrowHome)
+    : Activity(std::move(title), showTitleBar, titleFontScale, showArrowHome)
     , items(items)
     , selectedItem(selected)
 {
@@ -43,7 +43,7 @@ void AttributeChooserActivity::drawLayout()
       if (i != 0 || i == 0 && selectedItem != 0)
       {  // skip the first position, when the first item is selected
          display.setCursor(36, yMiddle - 2 + (i - 1) * 14);
-         display.print((*itemsIT).getTitle());
+         display.print(itemsIT->getTitle().c_str());
          itemsIT++;
       }
    }

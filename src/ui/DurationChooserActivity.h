@@ -37,7 +37,7 @@ public:
     *   @param showArrowHome    boolean value to choose if an arrow should
     * indicate, that there is an upper activity
     */
-   DurationChooserActivity(String title,
+   DurationChooserActivity(std::string title,
                            uint32_t duration,
                            bool showTitleBar = false,
                            int titleFontScale = 2,

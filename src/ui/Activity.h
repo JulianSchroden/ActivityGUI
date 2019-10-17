@@ -29,7 +29,7 @@ public:
     *  @param showArrowHome    boolean value to choose if an arrow should
     * indicate, that there is an upper activity
     */
-   Activity(String title,
+   Activity(std::string title,
             bool showTitleBar = false,
             int titleFontScale = 2,
             bool showArrowHome = false);
@@ -140,7 +140,7 @@ protected:
     *  @param draw          boolean value to choose if display buffer should be
     * transferred to display
     */
-   void drawTitleBar(String title,
+   void drawTitleBar(std::string title,
                      int fontScale,
                      bool showArrowHome,
                      bool draw = false);
@@ -155,7 +155,7 @@ protected:
 
 protected:
    Adafruit_SSD1306 &display;
-   String title;
+   std::string title;
    bool showTitleBar;
    int titleFontScale;
    bool showArrowHome;

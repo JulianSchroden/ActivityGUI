@@ -6,12 +6,12 @@
 
 #include "DurationChooserActivity.h"
 
-DurationChooserActivity::DurationChooserActivity(String title,
+DurationChooserActivity::DurationChooserActivity(std::string title,
                                                  uint32_t duration,
                                                  bool showTitleBar,
                                                  int titleFontScale,
                                                  bool showArrowHome)
-    : Activity(title, showTitleBar, titleFontScale, showArrowHome)
+    : Activity(std::move(title), showTitleBar, titleFontScale, showArrowHome)
     , duration(duration)
 {
    // calculate hours, minutes and seconds

@@ -10,12 +10,12 @@
 #include "TextUtils.h"
 
 
-Activity::Activity(String title,
+Activity::Activity(std::string title,
                    bool showTitleBar,
                    int titleFontScale,
                    bool showArrowHome)
     : display(ActivityRuntime::getDisplay())
-    , title(title)
+    , title(std::move(title))
     , showTitleBar(showTitleBar)
     , titleFontScale(titleFontScale)
     , showArrowHome(showArrowHome)
@@ -77,7 +77,7 @@ void Activity::drawLayout()
    }
 }
 
-void Activity::drawTitleBar(String title,
+void Activity::drawTitleBar(std::string title,
                             int fontScale,
                             bool showArrowHome,
                             bool draw)
@@ -91,7 +91,7 @@ void Activity::drawTitleBar(String title,
    display.setCursor((display.width() - dim.getWidth()) / 2, 3);
    display.setTextSize(fontScale);
    display.setTextColor(BLACK);
-   display.print(title);
+   display.print(title.c_str());
 
    // draw arrowHome triangle
    if (showArrowHome)

@@ -6,12 +6,12 @@
 
 #include "ListActivity.h"
 
-ListActivity::ListActivity(std::list<String> &items,
-                           String title,
+ListActivity::ListActivity(std::list<std::string> &items,
+                           std::string title,
                            bool showTitleBar,
                            int titleFontScale,
                            bool showArrowHome)
-    : Activity(title, showTitleBar, titleFontScale, showArrowHome)
+    : Activity(std::move(title), showTitleBar, titleFontScale, showArrowHome)
     , listItems(items)
 {
 }
@@ -20,7 +20,7 @@ void ListActivity::drawLayout()
 {
    Activity::drawLayout();
 
-   std::list<String>::iterator newIT = listItems.begin();
+   std::list<std::string>::iterator newIT = listItems.begin();
    // adavance list iterator to new startIndex
    std::advance(newIT, selectedItem - selectionIndicator);
 
@@ -47,7 +47,7 @@ void ListActivity::drawLayout()
          // draw text
          display.setCursor(listItemHeight + 4,
                            titleBarHeight + i * listItemHeight + 3);
-         display.println(*newIT);
+         display.println(newIT->c_str());
          // Draw list seperator
          display.drawFastHLine(0,
                                titleBarHeight + (i + 1) * listItemHeight,

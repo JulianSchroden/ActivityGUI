@@ -9,18 +9,21 @@
 
 #include <stdint.h>
 
+#include <string>
+
+
 class AttributeChoice
 {
-   String title;
+   std::string title;
    int16_t value;
 
 public:
-   AttributeChoice(String title, int16_t value)
+   AttributeChoice(std::string title, int16_t value)
+       : title(std::move(title)), value(value)
    {
-      this->title = title;
-      this->value = value;
    }
-   inline String getTitle() const
+
+   inline std::string getTitle() const
    {
       return title;
    }
