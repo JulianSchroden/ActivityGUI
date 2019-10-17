@@ -4,24 +4,23 @@
  * full license information.
  */
 
-#include "Runtime.h"
+#include "ActivityRuntime.h"
 
 #include <SPI.h>
 #include <Wire.h>
 
-
 #define LED_BUILTIN 2
 
-Adafruit_SSD1306 Runtime::display(LED_BUILTIN);
-std::stack<ActivityExecution *> Runtime::activityStack;
-std::list<Worker *> Runtime::workerList;
-ByteStack Runtime::resultBytes(16);
+Adafruit_SSD1306 ActivityRuntime::display(LED_BUILTIN);
+std::stack<ActivityExecution *> ActivityRuntime::activityStack;
+std::list<Worker *> ActivityRuntime::workerList;
+ByteStack ActivityRuntime::resultBytes(16);
 
-volatile int Runtime::encoderCounter = 0;
-volatile long Runtime::currentButtonPressedTime = 0;
-volatile long Runtime::currentButtonReleasedTime = 0;
+volatile int ActivityRuntime::encoderCounter = 0;
+volatile long ActivityRuntime::currentButtonPressedTime = 0;
+volatile long ActivityRuntime::currentButtonReleasedTime = 0;
 
-void Runtime::buttonCallback()
+void ActivityRuntime::buttonCallback()
 {
    if (!digitalRead(BUTTON))
    {
@@ -40,7 +39,7 @@ void Runtime::buttonCallback()
    }
 }
 
-void Runtime::encoderCallBack()
+void ActivityRuntime::encoderCallBack()
 {
    static int lastA = 0;
    int currentA = digitalRead(ENCODER_A);
@@ -59,18 +58,18 @@ void Runtime::encoderCallBack()
    }
 }
 
-Runtime &Runtime::getInstance()
+ActivityRuntime &ActivityRuntime::getInstance()
 {
-   static Runtime runtime;
-   return runtime;
+   static ActivityRuntime ActivityRuntime;
+   return ActivityRuntime;
 }
 
-Adafruit_SSD1306 &Runtime::getDisplay()
+Adafruit_SSD1306 &ActivityRuntime::getDisplay()
 {
    return display;
 }
 
-Runtime::Runtime()
+ActivityRuntime::ActivityRuntime()
 {
    pinMode(
        BUTTON,
@@ -87,7 +86,7 @@ Runtime::Runtime()
    display.clearDisplay();
 }
 
-void Runtime::runOnce()
+void ActivityRuntime::runOnce()
 {
    static int lastEncoderCounter = 0;
    static long lastButtonPressedTime = 0;
@@ -159,7 +158,7 @@ void Runtime::runOnce()
    yield();
 }
 
-void Runtime::pushActivity(ActivityExecution *execution)
+void ActivityRuntime::pushActivity(ActivityExecution *execution)
 {
    if (!activityStack.empty())
    {
@@ -169,19 +168,20 @@ void Runtime::pushActivity(ActivityExecution *execution)
    activityStack.top()->getActivity()->onStart();
 }
 
-void Runtime::startActivity(Activity *const activity)
+void ActivityRuntime::startActivity(Activity *const activity)
 {
    ActivityExecution *execution = new ActivityExecution(activity);
    pushActivity(execution);
 }
 
-void Runtime::startActivityForResult(Activity *const activity, int8_t key)
+void ActivityRuntime::startActivityForResult(Activity *const activity,
+                                             int8_t key)
 {
    ActivityExecution *execution = new ActivityExecution(activity, key);
    pushActivity(execution);
 }
 
-void Runtime::stopActivity()
+void ActivityRuntime::stopActivity()
 {
    if (activityStack.size() > 1)
    {
@@ -214,7 +214,7 @@ void Runtime::stopActivity()
    }
 }
 
-void Runtime::addWorker(Worker *const worker)
+void ActivityRuntime::addWorker(Worker *const worker)
 {
    workerList.push_back(worker);
 }

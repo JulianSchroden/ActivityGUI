@@ -4,8 +4,8 @@
  * full license information.
  */
 
-#ifndef _RUNTIME_h
-#define _RUNTIME_h
+#ifndef _ACTIVITY_RUNTIME_h
+#define _ACTIVITY_RUNTIME_h
 
 #include <Adafruit_SSD1306.h>
 #include <Arduino.h>
@@ -18,11 +18,12 @@
 #include "ui/Activity.h"
 #include "utils/ByteStack.h"
 
+
 #define BUTTON 26
 #define ENCODER_A 25
 #define ENCODER_B 33
 
-class Runtime
+class ActivityRuntime
 {
 private:
    static Adafruit_SSD1306 display;
@@ -45,18 +46,18 @@ private:
    static void pushActivity(ActivityExecution *execution);
 
    // private constructor to prevent calls from outside
-   Runtime();
+   ActivityRuntime();
 
 public:
    /**
-    *  perform the Runtime's work
+    *  perform the ActivityRuntime's work
     */
    static void runOnce();
 
    /**
-    *  @return a reference to the Runtime instance
+    *  @return a reference to the ActivityRuntime instance
     */
-   static Runtime &getInstance();
+   static ActivityRuntime &getInstance();
    /**
     *  @return a reference to the Adafruit_SSD1306 instance
     */

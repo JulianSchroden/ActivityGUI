@@ -6,13 +6,13 @@
 
 #include "Worker.h"
 
-#include "Runtime.h"
+#include "ActivityRuntime.h"
 
 
 Worker::Worker()
 {
-   // add the worker to the runtime's worker list
-   Runtime::addWorker(this);
+   // add the worker to the ActivityRuntime's worker list
+   ActivityRuntime::addWorker(this);
 }
 
 Worker::~Worker() {}
