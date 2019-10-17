@@ -6,6 +6,8 @@
 
 #include "AttributeChooserActivity.h"
 
+namespace ActivityGUI
+{
 AttributeChooserActivity::AttributeChooserActivity(
     std::vector<AttributeChoice> &items,
     std::string title,
@@ -98,3 +100,4 @@ void AttributeChooserActivity::onDestroy()
 {
    Activity::onDestroy();
 }
+}  // namespace ActivityGUI

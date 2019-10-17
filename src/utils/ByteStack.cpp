@@ -8,6 +8,9 @@
 
 #include <stdint.h>
 
+
+namespace ActivityGUI
+{
 ByteStack::ByteStack(uint16_t arraySize)
 {
    byteContent = new uint8_t[arraySize];  // allocate memory
@@ -66,3 +69,4 @@ void ByteStack::reset()
 {
    index = 0;
 }
+}  // namespace ActivityGUI

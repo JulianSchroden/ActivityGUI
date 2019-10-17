@@ -6,6 +6,8 @@
 
 #include "DurationChooserActivity.h"
 
+namespace ActivityGUI
+{
 DurationChooserActivity::DurationChooserActivity(std::string title,
                                                  uint32_t duration,
                                                  bool showTitleBar,
@@ -209,3 +211,4 @@ void DurationChooserActivity::onDestroy()
 {
    Activity::onDestroy();
 }
+}  // namespace ActivityGUI

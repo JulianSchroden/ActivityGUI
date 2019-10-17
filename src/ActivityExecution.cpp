@@ -6,6 +6,8 @@
 
 #include "ActivityExecution.h"
 
+namespace ActivityGUI
+{
 ActivityExecution::ActivityExecution(Activity *const activity, int8_t key)
     : activity(activity)
 {
@@ -30,3 +32,4 @@ const int8_t ActivityExecution::getResultKey() const
 {
    return resultKey;
 }
+}  // namespace ActivityGUI

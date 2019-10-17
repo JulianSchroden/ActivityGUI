@@ -9,6 +9,8 @@
 
 #include <string>
 
+namespace ActivityGUI
+{
 class Dimension
 {
 private:
@@ -44,5 +46,6 @@ public:
       return Dimension(text.length() * 6 * scale, 8 * scale);
    }
 };
+}  // namespace ActivityGUI
 
 #endif

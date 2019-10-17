@@ -13,6 +13,8 @@
 #include "TextUtils.h"
 
 
+namespace ActivityGUI
+{
 class ListActivity : public Activity
 {
 private:
@@ -87,5 +89,6 @@ public:
    virtual void onResume();
    virtual void onDestroy();
 };
+}  // namespace ActivityGUI
 
 #endif

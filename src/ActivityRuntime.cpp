@@ -11,6 +11,8 @@
 
 #define LED_BUILTIN 2
 
+namespace ActivityGUI
+{
 Adafruit_SSD1306 ActivityRuntime::display(LED_BUILTIN);
 std::stack<ActivityExecution *> ActivityRuntime::activityStack;
 std::list<Worker *> ActivityRuntime::workerList;
@@ -218,3 +220,4 @@ void ActivityRuntime::addWorker(Worker *const worker)
 {
    workerList.push_back(worker);
 }
+}  // namespace ActivityGUI

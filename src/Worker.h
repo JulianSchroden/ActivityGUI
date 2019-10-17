@@ -8,7 +8,8 @@
 #define _WORKER_H
 
 #include <stdint.h>
-
+namespace ActivityGUI
+{
 class Worker
 {
 private:
@@ -47,5 +48,6 @@ public:
     */
    virtual void runOnce() = 0;
 };
+}  // namespace ActivityGUI
 
 #endif

@@ -9,6 +9,8 @@
 
 #include <stdint.h>
 
+namespace ActivityGUI
+{
 class ByteStack
 {
 private:
@@ -116,5 +118,6 @@ public:
     */
    void reset();
 };
+}  // namespace ActivityGUI
 
 #endif

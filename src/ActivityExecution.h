@@ -9,6 +9,8 @@
 
 #include "ui/Activity.h"
 
+namespace ActivityGUI
+{
 class ActivityExecution
 {
 private:
@@ -38,5 +40,6 @@ public:
     */
    const int8_t getResultKey() const;
 };
+}  // namespace ActivityGUI
 
 #endif

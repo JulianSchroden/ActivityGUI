@@ -13,6 +13,8 @@
 #include "Activity.h"
 
 
+namespace ActivityGUI
+{
 class AttributeChooserActivity : public Activity
 {
 private:
@@ -55,5 +57,6 @@ public:
 
    virtual void setResult(ByteStack &bytes);
 };
+}  // namespace ActivityGUI
 
 #endif

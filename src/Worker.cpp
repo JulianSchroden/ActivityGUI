@@ -9,6 +9,8 @@
 #include "ActivityRuntime.h"
 
 
+namespace ActivityGUI
+{
 Worker::Worker()
 {
    // add the worker to the ActivityRuntime's worker list
@@ -36,3 +38,4 @@ int8_t Worker::getState() const
 {
    return state;
 }
+}  // namespace ActivityGUI

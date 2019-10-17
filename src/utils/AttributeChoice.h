@@ -12,6 +12,8 @@
 #include <string>
 
 
+namespace ActivityGUI
+{
 class AttributeChoice
 {
    std::string title;
@@ -32,5 +34,6 @@ public:
       return value;
    }
 };
+}  // namespace ActivityGUI
 
 #endif

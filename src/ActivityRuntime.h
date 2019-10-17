@@ -23,6 +23,8 @@
 #define ENCODER_A 25
 #define ENCODER_B 33
 
+namespace ActivityGUI
+{
 class ActivityRuntime
 {
 private:
@@ -91,4 +93,6 @@ public:
     */
    static void addWorker(Worker *const worker);
 };
+}  // namespace ActivityGUI
+
 #endif

@@ -10,6 +10,8 @@
 #include "TextUtils.h"
 
 
+namespace ActivityGUI
+{
 Activity::Activity(std::string title,
                    bool showTitleBar,
                    int titleFontScale,
@@ -131,3 +133,4 @@ void Activity::clearActivity(const int color, const boolean draw)
       display.display();
    }
 }
+}  // namespace ActivityGUI

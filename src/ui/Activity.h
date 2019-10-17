@@ -15,6 +15,8 @@
 #include "../utils/ByteStack.h"
 
 
+namespace ActivityGUI
+{
 class Activity
 {
 public:
@@ -163,5 +165,6 @@ protected:
    int titleBarHeight = 0;
    bool areInterruptsEnbabled = true;
 };
+}  // namespace ActivityGUI
 
 #endif

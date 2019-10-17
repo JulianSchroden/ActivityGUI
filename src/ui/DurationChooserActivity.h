@@ -9,6 +9,8 @@
 
 #include "Activity.h"
 
+namespace ActivityGUI
+{
 class DurationChooserActivity : public Activity
 {
 private:
@@ -53,5 +55,6 @@ public:
    virtual void onResume();
    virtual void onDestroy();
 };
+}  // namespace ActivityGUI
 
 #endif

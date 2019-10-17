@@ -6,6 +6,8 @@
 
 #include "ListActivity.h"
 
+namespace ActivityGUI
+{
 ListActivity::ListActivity(std::list<std::string> &items,
                            std::string title,
                            bool showTitleBar,
@@ -210,3 +212,4 @@ void ListActivity::onDestroy()
 {
    Activity::onDestroy();
 }
+}  // namespace ActivityGUI
