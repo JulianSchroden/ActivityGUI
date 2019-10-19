@@ -27,43 +27,21 @@ namespace ActivityGUI
 {
 class ActivityRuntime
 {
-private:
-   static Adafruit_SSD1306 display;
-   static std::stack<ActivityExecution *> activityStack;
-   static std::list<Worker *> workerList;
-   static ByteStack resultBytes;
-
-   static volatile int encoderCounter;
-   static volatile long currentButtonPressedTime;
-   static volatile long currentButtonReleasedTime;
-
-   // interrupt callbacks
-   static void encoderCallBack();
-   static void buttonCallback();
-
-   /**
-    * Pushes an ActivityExecution on top of the stack
-    * @param execution   a pointer to an ActivityExecution instance
-    */
-   static void pushActivity(ActivityExecution *execution);
-
-   // private constructor to prevent calls from outside
-   ActivityRuntime();
-
 public:
-   /**
-    *  perform the ActivityRuntime's work
-    */
-   static void runOnce();
-
    /**
     *  @return a reference to the ActivityRuntime instance
     */
    static ActivityRuntime &getInstance();
+
    /**
     *  @return a reference to the Adafruit_SSD1306 instance
     */
    static Adafruit_SSD1306 &getDisplay();
+
+   /**
+    *  perform the ActivityRuntime's work
+    */
+   static void runOnce();
 
    /**
     * Pauses the current topmost activity, pushes the provided activity to the
@@ -92,6 +70,30 @@ public:
     * @param worker   a const pointer to a Worker instance
     */
    static void addWorker(Worker *const worker);
+
+private:
+   // private constructor to prevent calls from outside
+   ActivityRuntime();
+
+   // interrupt callbacks
+   static void buttonCallback();
+   static void encoderCallBack();
+
+   /**
+    * Pushes an ActivityExecution on top of the stack
+    * @param execution   a pointer to an ActivityExecution instance
+    */
+   static void pushActivity(ActivityExecution *execution);
+
+private:
+   static Adafruit_SSD1306 display;
+   static std::stack<ActivityExecution *> activityStack;
+   static std::list<Worker *> workerList;
+   static ByteStack resultBytes;
+
+   static volatile int encoderCounter;
+   static volatile long currentButtonPressedTime;
+   static volatile long currentButtonReleasedTime;
 };
 }  // namespace ActivityGUI
 

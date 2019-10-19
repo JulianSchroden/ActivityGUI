@@ -9,6 +9,7 @@
 #include <SPI.h>
 #include <Wire.h>
 
+
 #define LED_BUILTIN 2
 
 namespace ActivityGUI
@@ -22,44 +23,6 @@ volatile int ActivityRuntime::encoderCounter = 0;
 volatile long ActivityRuntime::currentButtonPressedTime = 0;
 volatile long ActivityRuntime::currentButtonReleasedTime = 0;
 
-void ActivityRuntime::buttonCallback()
-{
-   if (!digitalRead(BUTTON))
-   {
-      if ((millis() - currentButtonPressedTime) >
-          100)  // software debounce: only respond to button press when it
-                // occurs 100ms after the last press
-         currentButtonPressedTime = millis();
-   }
-   else
-   {
-      if (millis() - currentButtonReleasedTime > 100)
-      {  // software debounce: only respond to button release when it occurs
-         // 100ms after the last release
-         currentButtonReleasedTime = millis();
-      }
-   }
-}
-
-void ActivityRuntime::encoderCallBack()
-{
-   static int lastA = 0;
-   int currentA = digitalRead(ENCODER_A);
-
-   if (currentA != lastA)
-   {
-      if (currentA != digitalRead(ENCODER_B))
-      {
-         encoderCounter++;
-      }
-      else
-      {
-         encoderCounter--;
-      }
-      lastA = currentA;
-   }
-}
-
 ActivityRuntime &ActivityRuntime::getInstance()
 {
    static ActivityRuntime ActivityRuntime;
@@ -69,23 +32,6 @@ ActivityRuntime &ActivityRuntime::getInstance()
 Adafruit_SSD1306 &ActivityRuntime::getDisplay()
 {
    return display;
-}
-
-ActivityRuntime::ActivityRuntime()
-{
-   pinMode(
-       BUTTON,
-       INPUT_PULLUP);  // when the Button is pushed, it results in a LOW reading
-   pinMode(ENCODER_A, INPUT);
-   pinMode(ENCODER_B, INPUT);
-   attachInterrupt(digitalPinToInterrupt(BUTTON), buttonCallback, CHANGE);
-   attachInterrupt(digitalPinToInterrupt(ENCODER_A), encoderCallBack, CHANGE);
-
-   // display init
-   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
-   display.display();
-   delay(1000);
-   display.clearDisplay();
 }
 
 void ActivityRuntime::runOnce()
@@ -160,16 +106,6 @@ void ActivityRuntime::runOnce()
    yield();
 }
 
-void ActivityRuntime::pushActivity(ActivityExecution *execution)
-{
-   if (!activityStack.empty())
-   {
-      activityStack.top()->getActivity()->onPause();
-   }
-   activityStack.push(execution);
-   activityStack.top()->getActivity()->onStart();
-}
-
 void ActivityRuntime::startActivity(Activity *const activity)
 {
    ActivityExecution *execution = new ActivityExecution(activity);
@@ -220,4 +156,70 @@ void ActivityRuntime::addWorker(Worker *const worker)
 {
    workerList.push_back(worker);
 }
+
+ActivityRuntime::ActivityRuntime()
+{
+   pinMode(
+       BUTTON,
+       INPUT_PULLUP);  // when the Button is pushed, it results in a LOW reading
+   pinMode(ENCODER_A, INPUT);
+   pinMode(ENCODER_B, INPUT);
+   attachInterrupt(digitalPinToInterrupt(BUTTON), buttonCallback, CHANGE);
+   attachInterrupt(digitalPinToInterrupt(ENCODER_A), encoderCallBack, CHANGE);
+
+   // display init
+   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+   display.display();
+   delay(1000);
+   display.clearDisplay();
+}
+
+void ActivityRuntime::buttonCallback()
+{
+   if (!digitalRead(BUTTON))
+   {
+      if ((millis() - currentButtonPressedTime) >
+          100)  // software debounce: only respond to button press when it
+                // occurs 100ms after the last press
+         currentButtonPressedTime = millis();
+   }
+   else
+   {
+      if (millis() - currentButtonReleasedTime > 100)
+      {  // software debounce: only respond to button release when it occurs
+         // 100ms after the last release
+         currentButtonReleasedTime = millis();
+      }
+   }
+}
+
+void ActivityRuntime::encoderCallBack()
+{
+   static int lastA = 0;
+   int currentA = digitalRead(ENCODER_A);
+
+   if (currentA != lastA)
+   {
+      if (currentA != digitalRead(ENCODER_B))
+      {
+         encoderCounter++;
+      }
+      else
+      {
+         encoderCounter--;
+      }
+      lastA = currentA;
+   }
+}
+
+void ActivityRuntime::pushActivity(ActivityExecution *execution)
+{
+   if (!activityStack.empty())
+   {
+      activityStack.top()->getActivity()->onPause();
+   }
+   activityStack.push(execution);
+   activityStack.top()->getActivity()->onStart();
+}
+
 }  // namespace ActivityGUI
