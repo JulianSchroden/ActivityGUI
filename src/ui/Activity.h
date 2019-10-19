@@ -42,26 +42,26 @@ public:
    virtual ~Activity();
 
    /**
-    *  Callback which is called by the ActivityRuntime, when the user scrolls
+    *  Callback which is called by the Runtime, when the user scrolls
     *  @param distance   an integer value which states, how far the user has
     * scrolled
     */
    virtual void onScroll(int distance);
 
    /**
-    *  ActivityRuntime callback which is called, when the user performs a click
+    *  Runtime callback which is called, when the user performs a click
     * action
     */
    virtual void onClick();
 
    /**
-    *  ActivityRuntime callback which is called, when the user performs a
+    *  Runtime callback which is called, when the user performs a
     * longClick action ( > 1s)
     */
    virtual void onLongClick();
 
    /**
-    *  ActivityRuntime callback which is called, when the user navigates to the
+    *  Runtime callback which is called, when the user navigates to the
     * upper activity and a result is expected
     *  @param bytes   a reference to a bytestack which allows passing multiple
     * primitive data types easily
@@ -70,7 +70,7 @@ public:
    virtual void setResult(ByteStack &bytes);
 
    /**
-    *  ActivityRuntime callback which is called, when the user has navigated to
+    *  Runtime callback which is called, when the user has navigated to
     * the upper activity and a result is expected
     *  @param result   a reference to a bytestack which allows receiving
     * multiple primitive data types easily
@@ -81,37 +81,37 @@ public:
    virtual void onActivityResult(ByteStack &result, int8_t key);
 
    /**
-    *  ActivityRuntime callback which is called on the newly created activity
+    *  Runtime callback which is called on the newly created activity
     */
    virtual void onStart();
 
    /**
-    *  ActivityRuntime callback which is called on an activity, after it has
+    *  Runtime callback which is called on an activity, after it has
     * started a new activity
     */
    virtual void onPause();
 
    /**
-    *  ActivityRuntime callback which is called on the previous activity, when
+    *  Runtime callback which is called on the previous activity, when
     * the user has navigated back to it
     */
    virtual void onResume();
 
    /**
-    *  ActivityRuntime callback which is called on an activity, when the user
+    *  Runtime callback which is called on an activity, when the user
     * navigates to the previous activity
     */
    virtual void onDestroy();
 
 protected:
    /**
-    *  Starts a new activity by calling corresponding ActivityRuntime method
+    *  Starts a new activity by calling corresponding Runtime method
     *  @param activity   a pointer to an activity instance
     */
    void startActivity(Activity *const activity);
 
    /**
-    *  Starts a new activity by calling corresponding ActivityRuntime method
+    *  Starts a new activity by calling corresponding Runtime method
     *  A flag is set to allow data to be transferred to the calling activity
     *  @param activity   a pointer to an activity instance
     *  @param key        an integer value between -128 and 127 to associate the
@@ -120,7 +120,7 @@ protected:
    void startActivityForResult(Activity *const activity, int8_t key);
 
    /**
-    *  Stops current activity by calling corresponding ActivityRuntime method
+    *  Stops current activity by calling corresponding Runtime method
     *  Frees allocated memory
     */
    void stopActivity();

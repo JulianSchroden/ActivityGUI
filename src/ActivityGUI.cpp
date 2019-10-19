@@ -4,7 +4,7 @@
  * full license information.
  */
 
-#include "ActivityRuntime.h"
+#include "ActivityGUI.h"
 
 #include <SPI.h>
 #include <Wire.h>
@@ -14,27 +14,27 @@
 
 namespace ActivityGUI
 {
-Adafruit_SSD1306 ActivityRuntime::display(LED_BUILTIN);
-std::stack<ActivityExecution *> ActivityRuntime::activityStack;
-std::list<Worker *> ActivityRuntime::workerList;
-ByteStack ActivityRuntime::resultBytes(16);
+Adafruit_SSD1306 Runtime::display(LED_BUILTIN);
+std::stack<ActivityExecution *> Runtime::activityStack;
+std::list<Worker *> Runtime::workerList;
+ByteStack Runtime::resultBytes(16);
 
-volatile int ActivityRuntime::encoderCounter = 0;
-volatile long ActivityRuntime::currentButtonPressedTime = 0;
-volatile long ActivityRuntime::currentButtonReleasedTime = 0;
+volatile int Runtime::encoderCounter = 0;
+volatile long Runtime::currentButtonPressedTime = 0;
+volatile long Runtime::currentButtonReleasedTime = 0;
 
-ActivityRuntime &ActivityRuntime::getInstance()
+Runtime &Runtime::getInstance()
 {
-   static ActivityRuntime ActivityRuntime;
-   return ActivityRuntime;
+   static Runtime Runtime;
+   return Runtime;
 }
 
-Adafruit_SSD1306 &ActivityRuntime::getDisplay()
+Adafruit_SSD1306 &Runtime::getDisplay()
 {
    return display;
 }
 
-void ActivityRuntime::runOnce()
+void Runtime::runOnce()
 {
    static int lastEncoderCounter = 0;
    static long lastButtonPressedTime = 0;
@@ -106,20 +106,19 @@ void ActivityRuntime::runOnce()
    yield();
 }
 
-void ActivityRuntime::startActivity(Activity *const activity)
+void Runtime::startActivity(Activity *const activity)
 {
    ActivityExecution *execution = new ActivityExecution(activity);
    pushActivity(execution);
 }
 
-void ActivityRuntime::startActivityForResult(Activity *const activity,
-                                             int8_t key)
+void Runtime::startActivityForResult(Activity *const activity, int8_t key)
 {
    ActivityExecution *execution = new ActivityExecution(activity, key);
    pushActivity(execution);
 }
 
-void ActivityRuntime::stopActivity()
+void Runtime::stopActivity()
 {
    if (activityStack.size() > 1)
    {
@@ -152,12 +151,12 @@ void ActivityRuntime::stopActivity()
    }
 }
 
-void ActivityRuntime::addWorker(Worker *const worker)
+void Runtime::addWorker(Worker *const worker)
 {
    workerList.push_back(worker);
 }
 
-ActivityRuntime::ActivityRuntime()
+Runtime::Runtime()
 {
    pinMode(
        BUTTON,
@@ -174,7 +173,7 @@ ActivityRuntime::ActivityRuntime()
    display.clearDisplay();
 }
 
-void ActivityRuntime::buttonCallback()
+void Runtime::buttonCallback()
 {
    if (!digitalRead(BUTTON))
    {
@@ -193,7 +192,7 @@ void ActivityRuntime::buttonCallback()
    }
 }
 
-void ActivityRuntime::encoderCallBack()
+void Runtime::encoderCallBack()
 {
    static int lastA = 0;
    int currentA = digitalRead(ENCODER_A);
@@ -212,7 +211,7 @@ void ActivityRuntime::encoderCallBack()
    }
 }
 
-void ActivityRuntime::pushActivity(ActivityExecution *execution)
+void Runtime::pushActivity(ActivityExecution *execution)
 {
    if (!activityStack.empty())
    {

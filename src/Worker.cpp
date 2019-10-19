@@ -6,15 +6,15 @@
 
 #include "Worker.h"
 
-#include "ActivityRuntime.h"
+#include "ActivityGUI.h"
 
 
 namespace ActivityGUI
 {
 Worker::Worker()
 {
-   // add the worker to the ActivityRuntime's worker list
-   ActivityRuntime::addWorker(this);
+   // add the worker to the Runtime's worker list
+   Runtime::addWorker(this);
 }
 
 Worker::~Worker() {}

@@ -4,8 +4,8 @@
  * full license information.
  */
 
-#ifndef _ACTIVITY_RUNTIME_h
-#define _ACTIVITY_RUNTIME_h
+#ifndef _ACTIVITY_GUI_h
+#define _ACTIVITY_GUI_h
 
 #include <Adafruit_SSD1306.h>
 #include <Arduino.h>
@@ -25,13 +25,13 @@
 
 namespace ActivityGUI
 {
-class ActivityRuntime
+class Runtime
 {
 public:
    /**
-    *  @return a reference to the ActivityRuntime instance
+    *  @return a reference to the Runtime instance
     */
-   static ActivityRuntime &getInstance();
+   static Runtime &getInstance();
 
    /**
     *  @return a reference to the Adafruit_SSD1306 instance
@@ -39,7 +39,7 @@ public:
    static Adafruit_SSD1306 &getDisplay();
 
    /**
-    *  perform the ActivityRuntime's work
+    *  perform the Runtime's work
     */
    static void runOnce();
 
@@ -73,7 +73,7 @@ public:
 
 private:
    // private constructor to prevent calls from outside
-   ActivityRuntime();
+   Runtime();
 
    // interrupt callbacks
    static void buttonCallback();

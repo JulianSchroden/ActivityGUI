@@ -6,7 +6,7 @@
 
 #include "Activity.h"
 
-#include "../ActivityRuntime.h"
+#include "../ActivityGUI.h"
 #include "TextUtils.h"
 
 
@@ -16,7 +16,7 @@ Activity::Activity(std::string title,
                    bool showTitleBar,
                    int titleFontScale,
                    bool showArrowHome)
-    : display(ActivityRuntime::getDisplay())
+    : display(Runtime::getDisplay())
     , title(std::move(title))
     , showTitleBar(showTitleBar)
     , titleFontScale(titleFontScale)
@@ -58,17 +58,17 @@ void Activity::onDestroy() {}
 
 void Activity::startActivity(Activity *const activity)
 {
-   ActivityRuntime::startActivity(activity);
+   Runtime::startActivity(activity);
 }
 
 void Activity::startActivityForResult(Activity *const activity, int8_t key)
 {
-   ActivityRuntime::startActivityForResult(activity, key);
+   Runtime::startActivityForResult(activity, key);
 }
 
 void Activity::stopActivity()
 {
-   ActivityRuntime::stopActivity();
+   Runtime::stopActivity();
 }
 
 void Activity::drawLayout()
