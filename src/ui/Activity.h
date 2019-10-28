@@ -7,7 +7,6 @@
 #ifndef _ACTIVITY_h
 #define _ACTIVITY_h
 
-#include <ActivityGUI.h>
 #include <Adafruit_SSD1306.h>
 #include <Arduino.h>
 
@@ -15,8 +14,11 @@
 
 #include "../utils/ByteStack.h"
 
+
 namespace ActivityGUI
 {
+class Runtime;
+
 class Activity
 {
 public:
@@ -130,7 +132,7 @@ protected:
    //!
    void clearActivity(const int color = BLACK, boolean draw = true);
 
-protected: // ToDo: should be private
+protected:  // ToDo: should be private
    std::string title_;
    bool showTitleBar_;
    int titleFontScale_;
@@ -140,7 +142,7 @@ protected: // ToDo: should be private
    bool areInterruptsEnbabled_ = true;
 
 private:
-   Runtime rutime_;
+   Runtime *runtime_;
 };
 }  // namespace ActivityGUI
 
