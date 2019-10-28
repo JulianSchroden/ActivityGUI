@@ -11,29 +11,30 @@
 
 #include <string>
 
+
 namespace ActivityGUI
 {
 class AttributeChoice
 {
 public:
    AttributeChoice(std::string title, int16_t value)
-       : title(std::move(title)), value(value)
+       : title_(std::move(title)), value_(value)
    {
    }
 
    inline std::string title() const
    {
-      return title;
+      return title_;
    }
 
    inline int16_t value() const
    {
-      return value;
+      return value_;
    }
 
 private:
-   std::string title;
-   int16_t value;
+   std::string title_;
+   int16_t value_;
 };
 }  // namespace ActivityGUI
 
