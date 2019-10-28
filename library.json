@@ -26,6 +26,10 @@
         },
         {
             "name": "Adafruit SSD1306"
+        },
+        {
+            "name": "InputDevices",
+            "version": "https://github.com/JulianSchroden/InputDevices.git"
         }
     ]
 }

@@ -1,35 +1,34 @@
 /**
- *  Copyright (c) 2017-2018 Julian Schroden. All rights reserved.
+ *  Copyright (c) 2017-2019 Julian Schroden. All rights reserved.
  *  Licensed under the MIT License. See LICENSE file in the project root for
- * full license information.
+ *  full license information.
  */
 
 #include "ActivityExecution.h"
 
 namespace ActivityGUI
 {
-ActivityExecution::ActivityExecution(Activity *const activity, int8_t key)
-    : activity(activity)
+ActivityExecution::ActivityExecution(std::unique_ptr<Activity> activity,
+                                     bool isResultExpected,
+                                     uint8_t key)
+    : activity_(std::move(activity))
+    , isResultExpected_(isResultExpected)
+    , resultKey_(key)
 {
-   if (key != -1)
-   {
-      resultKey = key;
-      resultExpected = true;
-   }
 }
 
 Activity *ActivityExecution::getActivity() const
 {
-   return activity;
+   return activity_.get();
 }
 
 const bool ActivityExecution::isResultExpected() const
 {
-   return resultExpected;
+   return isResultExpected_;
 }
 
 const int8_t ActivityExecution::getResultKey() const
 {
-   return resultKey;
+   return resultKey_;
 }
 }  // namespace ActivityGUI

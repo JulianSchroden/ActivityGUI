@@ -1,21 +1,75 @@
 /**
- *  Copyright (c) 2017-2018 Julian Schroden. All rights reserved.
+ *  Copyright (c) 2017-2019 Julian Schroden. All rights reserved.
  *  Licensed under the MIT License. See LICENSE file in the project root for
- * full license information.
+ *  full license information.
  */
 
 #include "ListActivity.h"
 
 namespace ActivityGUI
 {
-ListActivity::ListActivity(std::list<std::string> &items,
+ListActivity::ListActivity(std::vector<std::string> items,
                            std::string title,
                            bool showTitleBar,
                            int titleFontScale,
                            bool showArrowHome)
     : Activity(std::move(title), showTitleBar, titleFontScale, showArrowHome)
-    , listItems(items)
+    , listItems(std::move(items))
 {
+}
+
+void ListActivity::onScroll(int distance)
+{
+   selectedItem += distance;
+   // jump to end, when user scrolls past the first element
+   if (selectedItem < 0)
+   {
+      selectedItem = listItems.size() + selectedItem;
+   }
+   // jump to start, when user scrolls past the last element
+   else if (selectedItem >= listItems.size())
+   {
+      selectedItem = selectedItem % listItems.size();
+   }
+
+   Serial.printf("Selected Item=%d\n", selectedItem);
+
+   // only draw the layout, when it has been changed
+   if (selectedItem != lastSelectedItem)
+   {
+      selectionIndicator = selectedItem;
+      if (selectionIndicator > visibleItemCount - 1)
+      {
+         selectionIndicator = visibleItemCount - 1;
+      }
+      drawSelectionIndicator(selectionIndicator);
+      drawScrollIndicator();
+      // redraw list layout, when user scrolls past the last visible item
+      if ((selectedItem > selectionIndicator) ||
+          (selectedItem < visibleItemCount &&
+           lastSelectedItem >= visibleItemCount))
+      {
+         drawLayout();
+      }
+
+      lastSelectedItem = selectedItem;
+   }
+}
+
+void ListActivity::onClick()
+{
+   onItemClick(selectedItem);
+}
+
+void ListActivity::onItemClick(int index) {}
+
+void ListActivity::onStart()
+{
+   // calculate the number of visible items
+   visibleItemCount = ((display.height() - titleBarHeight) / listItemHeight);
+   maxIndex = listItems.size() - 1;
+
+   Activity::onStart();
 }
 
 void ListActivity::drawLayout()
@@ -145,71 +199,4 @@ void ListActivity::drawSelectionIndicator(const int index, const boolean draw)
    lastSelectionIndicator = index;
 }
 
-void ListActivity::onScroll(int distance)
-{
-   selectedItem += distance;
-   // jump to end, when user scrolls past the first element
-   if (selectedItem < 0)
-   {
-      selectedItem = listItems.size() + selectedItem;
-   }
-   // jump to start, when user scrolls past the last element
-   else if (selectedItem >= listItems.size())
-   {
-      selectedItem = selectedItem % listItems.size();
-   }
-
-   Serial.printf("Selected Item=%d\n", selectedItem);
-
-   // only draw the layout, when it has been changed
-   if (selectedItem != lastSelectedItem)
-   {
-      selectionIndicator = selectedItem;
-      if (selectionIndicator > visibleItemCount - 1)
-      {
-         selectionIndicator = visibleItemCount - 1;
-      }
-      drawSelectionIndicator(selectionIndicator);
-      drawScrollIndicator();
-      // redraw list layout, when user scrolls past the last visible item
-      if ((selectedItem > selectionIndicator) ||
-          (selectedItem < visibleItemCount &&
-           lastSelectedItem >= visibleItemCount))
-      {
-         drawLayout();
-      }
-
-      lastSelectedItem = selectedItem;
-   }
-}
-
-void ListActivity::onClick()
-{
-   onItemClick(selectedItem);
-}
-
-void ListActivity::onItemClick(int index) {}
-
-void ListActivity::onStart()
-{
-   // calculate the number of visible items
-   visibleItemCount = ((display.height() - titleBarHeight) / listItemHeight);
-   maxIndex = listItems.size() - 1;
-
-   Activity::onStart();
-}
-
-void ListActivity::onPause()
-{
-   Activity::onPause();
-}
-
-void ListActivity::onResume()
-{
-   Activity::onResume();
-}
-void ListActivity::onDestroy()
-{
-   Activity::onDestroy();
-}
 }  // namespace ActivityGUI

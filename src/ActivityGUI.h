@@ -1,7 +1,7 @@
 /**
- *  Copyright (c) 2017-2018 Julian Schroden. All rights reserved.
+ *  Copyright (c) 2017-2019 Julian Schroden. All rights reserved.
  *  Licensed under the MIT License. See LICENSE file in the project root for
- * full license information.
+ *  full license information.
  */
 
 #ifndef _ACTIVITY_GUI_h
@@ -11,89 +11,73 @@
 #include <Arduino.h>
 
 #include <list>
+#include <memory>
 #include <stack>
 
 #include "ActivityExecution.h"
 #include "Worker.h"
+#include "input/InputModule.h"
 #include "ui/Activity.h"
 #include "utils/ByteStack.h"
 
-
-#define BUTTON 26
-#define ENCODER_A 25
-#define ENCODER_B 33
 
 namespace ActivityGUI
 {
 class Runtime
 {
 public:
-   /**
-    *  @return a reference to the Runtime instance
-    */
-   static Runtime &getInstance();
+   //!
+   //! Create a Runtime instance.
+   //!
+   Runtime(InputModule inputModule, Adafruit_SSD1306 display);
 
-   /**
-    *  @return a reference to the Adafruit_SSD1306 instance
-    */
-   static Adafruit_SSD1306 &getDisplay();
+   //!
+   //! Perform the Runtime's work
+   //! This function needs to be called periodically.
+   //!
+   void runOnce();
 
-   /**
-    *  perform the Runtime's work
-    */
-   static void runOnce();
+   //!
+   //! Push the provided \a activity to the top of the activity stack and start
+   //! it. Before starting the activity, the topmost activity is paused.
+   //!
+   void startActivity(std::unique_ptr<Activity> activity);
 
-   /**
-    * Pauses the current topmost activity, pushes the provided activity to the
-    * stack and starts it
-    * @param activity   a const Pointer to an Activity instance
-    */
-   static void startActivity(Activity *const activity);
+   //!
+   //! Push the provided \a activity to the top of the activity stack and start
+   //! it. A flag is set to tell the runtime, that the calling activity expects
+   //! a result. Before starting the activity, the topmost activity is paused.
+   //!
+   void startActivityForResult(std::unique_ptr<Activity> activity, int8_t key);
 
-   /**
-    * Pauses the current topmost activity, pushes the provided activity to the
-    * stack and starts it. A flag is set, that the calling activity expects a
-    * result from the started activity.
-    * @param activity   a const pointer to an Activity instance
-    * @param key        a int8_t value >= 0 to identify the activity
-    */
-   static void startActivityForResult(Activity *const activity, int8_t key);
+   //!
+   //!  Stops the topmost Activity and resumes the activity below.
+   //!
+   void stopActivity();
 
-   /**
-    *  Stops the topmost Activity, removes it from the stack and resumes
-    * activity below
-    */
-   static void stopActivity();
+   //!
+   //! Add a \a worker to the workerlist
+   //!
+   void addWorker(Worker *const worker);
 
-   /**
-    * Add a worker to the workerList
-    * @param worker   a const pointer to a Worker instance
-    */
-   static void addWorker(Worker *const worker);
+   //!
+   //! Get a reference to the Adafruit_SSD1306 display instance
+   //!
+   Adafruit_SSD1306 &display();
 
 private:
-   // private constructor to prevent calls from outside
-   Runtime();
-
-   // interrupt callbacks
-   static void buttonCallback();
-   static void encoderCallBack();
-
-   /**
-    * Pushes an ActivityExecution on top of the stack
-    * @param execution   a pointer to an ActivityExecution instance
-    */
-   static void pushActivity(ActivityExecution *execution);
+   //!
+   //! Helper function which pushes the provided \a activityExecution on top of
+   //! the stack
+   void pushActivity(std::unique_ptr<ActivityExecution> activityExecution);
 
 private:
-   static Adafruit_SSD1306 display;
-   static std::stack<ActivityExecution *> activityStack;
-   static std::list<Worker *> workerList;
-   static ByteStack resultBytes;
-
-   static volatile int encoderCounter;
-   static volatile long currentButtonPressedTime;
-   static volatile long currentButtonReleasedTime;
+   InputModule inputModule_;
+   Adafruit_SSD1306 display_;
+   ByteStack resultBytes_;
+   std::stack<std::unique_ptr<ActivityExecution>> activityStack;
+   std::list<Worker *> workerList;
+   
 };
 }  // namespace ActivityGUI
 

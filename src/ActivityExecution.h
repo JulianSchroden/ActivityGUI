@@ -1,44 +1,51 @@
 /**
- *  Copyright (c) 2017-2018 Julian Schroden. All rights reserved.
+ *  Copyright (c) 2017-2019 Julian Schroden. All rights reserved.
  *  Licensed under the MIT License. See LICENSE file in the project root for
- * full license information.
+ *  full license information.
  */
 
 #ifndef _ACTIVITY_EXECUTION_h
 #define _ACTIVITY_EXECUTION_h
 
+#include <memory>
+
 #include "ui/Activity.h"
+
 
 namespace ActivityGUI
 {
 class ActivityExecution
 {
-private:
-   Activity *activity;
-   bool resultExpected = false;
-   int8_t resultKey = -1;  // -1 -> no result is expected
 public:
-   /**
-    *  ActivityExecution constructor
-    *  @param activity   a const pointer to an activity instance
-    *  @param key        optional parameter to identify activity instance
-    */
-   ActivityExecution(Activity *const activity, int8_t key = -1);
+   //!
+   //! Create an ActivityExecution instance of the provided \a acitivity.
+   //! When the calling Activity expects a result, \a isResultExpected needs to
+   //! be set to true. The \a key is passed to the onActivityResult function of
+   //! the calling Activity, so it is easy to identify the result.
+   //!
+   ActivityExecution(std::unique_ptr<Activity> activity,
+                     bool isResultExpected = false,
+                     uint8_t key = 0);
 
-   /**
-    * @return a pointer to the activity instance
-    */
+   //!
+   //! Get a pointer to the activity
+   //!
    Activity *getActivity() const;
 
-   /**
-    *  @return true if a result is expected, otherwise false
-    */
+   //!
+   //! Check if the activity should return a result.
+   //!
    const bool isResultExpected() const;
 
-   /**
-    *  @return the result key
-    */
+   //!
+   //! Get the Result key
+   //!
    const int8_t getResultKey() const;
+
+private:
+   std::unique_ptr<Activity> activity_;
+   bool isResultExpected_;
+   uint8_t resultKey_;
 };
 }  // namespace ActivityGUI
 

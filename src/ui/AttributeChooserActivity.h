@@ -1,7 +1,7 @@
 /**
- *  Copyright (c) 2017-2018 Julian Schroden. All rights reserved.
+ *  Copyright (c) 2017-2019 Julian Schroden. All rights reserved.
  *  Licensed under the MIT License. See LICENSE file in the project root for
- * full license information.
+ *  full license information.
  */
 
 #ifndef _ATTRIBUTE_CHOOSER_ACTIVITY_h
@@ -17,45 +17,30 @@ namespace ActivityGUI
 {
 class AttributeChooserActivity : public Activity
 {
-private:
-   std::vector<AttributeChoice> &items;
-   int8_t selectedItem = 0;      // index of the selected item
-   int8_t lastSelectedItem = 0;  // index of the last selected item
-
-protected:
-   virtual void drawLayout();
-
 public:
-   /**
-    *   AttributeChooserActivity constructor
-    *   @param items           vector containing AttributeChoices
-    *   @param title            a string containing the activity-title which can
-    * be displayed in the titleBar
-    *   @param selected         an integer index of the item, which is selected
-    * by default after launching the activity
-    *   @param showTitleBar     boolean value to choose, if the titleBar should
-    * be displayed
-    *   @param titleFontScale   an integer value > 0 to modify the size of the
-    * titleBar text; tested with the values 1 and 2
-    *   @param showArrowHome    boolean value to choose if an arrow should
-    * indicate, that there is an upper activity
-    */
-   AttributeChooserActivity(std::vector<AttributeChoice> &items,
+   //!
+   //! Create AttributeChooserActivity instance.
+   //! The AttributeChooserActivity creates a list layout using the provided \a
+   //! items. The \a selected parameter can be used to select the default value.
+   //!
+   AttributeChooserActivity(std::vector<AttributeChoice> items,
                             std::string title,
                             uint8_t selected = 0,
                             bool showTitleBar = false,
                             int titleFontScale = 2,
                             bool showArrowHome = false);
 
-   virtual void onScroll(int distance);
-   virtual void onClick();
+   void onScroll(int distance) override;
 
-   virtual void onStart();
-   virtual void onPause();
-   virtual void onResume();
-   virtual void onDestroy();
+   void setResult(ByteStack &bytes) override;
 
-   virtual void setResult(ByteStack &bytes);
+protected:
+   virtual void drawLayout();
+
+private:
+   std::vector<AttributeChoice> items;
+   int8_t selectedItem = 0;      // index of the selected item
+   int8_t lastSelectedItem = 0;  // index of the last selected item
 };
 }  // namespace ActivityGUI
 

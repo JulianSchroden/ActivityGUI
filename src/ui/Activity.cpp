@@ -1,7 +1,7 @@
 /**
- *  Copyright (c) 2017-2018 Julian Schroden. All rights reserved.
+ *  Copyright (c) 2017-2019 Julian Schroden. All rights reserved.
  *  Licensed under the MIT License. See LICENSE file in the project root for
- * full license information.
+ *  full license information.
  */
 
 #include "Activity.h"
@@ -9,22 +9,21 @@
 #include "../ActivityGUI.h"
 #include "TextUtils.h"
 
-
 namespace ActivityGUI
 {
 Activity::Activity(std::string title,
                    bool showTitleBar,
                    int titleFontScale,
-                   bool showArrowHome)
-    : display(Runtime::getDisplay())
-    , title(std::move(title))
-    , showTitleBar(showTitleBar)
-    , titleFontScale(titleFontScale)
-    , showArrowHome(showArrowHome)
+                   bool showArrowHome),
+    title(std::move(title)), showTitleBar(showTitleBar),
+    titleFontScale(titleFontScale), showArrowHome(showArrowHome)
 {
 }
 
-Activity::~Activity() {}
+void setRuntime(Runtime *runtime)
+{
+   runtime_ = runtime;
+}
 
 void Activity::onScroll(int distance) {}
 
@@ -33,16 +32,16 @@ void Activity::onClick() {}
 void Activity::onLongClick()
 {
    // the default behaviour of onLongClick stops the current activity
-   stopActivity();
+   runtime()->stopActivity();
 }
 
 void Activity::setResult(ByteStack &bytes) {}
 
-void Activity::onActivityResult(ByteStack &result, int8_t key) {}
+void Activity::onActivityResult(ByteStack result, uint8_t key) {}
 
 void Activity::onStart()
 {
-   display.clearDisplay();
+   display().clearDisplay();
    drawLayout();
 }
 
@@ -50,25 +49,20 @@ void Activity::onPause() {}
 
 void Activity::onResume()
 {
-   display.clearDisplay();
+   display().clearDisplay();
    drawLayout();
 }
 
 void Activity::onDestroy() {}
 
-void Activity::startActivity(Activity *const activity)
+Runtime *Activity::runtime()
 {
-   Runtime::startActivity(activity);
+   return runtime_;
 }
 
-void Activity::startActivityForResult(Activity *const activity, int8_t key)
+Adafruit_SSD1306 &Activity::display()
 {
-   Runtime::startActivityForResult(activity, key);
-}
-
-void Activity::stopActivity()
-{
-   Runtime::stopActivity();
+   return runtime_->display();
 }
 
 void Activity::drawLayout()
@@ -87,50 +81,50 @@ void Activity::drawTitleBar(std::string title,
    // draw titleBar background
    Dimension dim = TextUtils::getTextBounds(title, fontScale);
    titleBarHeight = dim.getHeight() + 4;
-   display.fillRect(0, 0, display.width(), dim.getHeight() + 4, WHITE);
+   display().fillRect(0, 0, display().width(), dim.getHeight() + 4, WHITE);
 
    // print titleBar text
-   display.setCursor((display.width() - dim.getWidth()) / 2, 3);
-   display.setTextSize(fontScale);
-   display.setTextColor(BLACK);
-   display.print(title.c_str());
+   display().setCursor((display().width() - dim.getWidth()) / 2, 3);
+   display().setTextSize(fontScale);
+   display().setTextColor(BLACK);
+   display().print(title.c_str());
 
    // draw arrowHome triangle
    if (showArrowHome)
    {
-      display.fillTriangle(4,
-                           titleBarHeight / 2,
-                           12,
-                           (titleBarHeight / 2) - 4,
-                           12,
-                           (titleBarHeight / 2) + 4,
-                           BLACK);
+      display().fillTriangle(4,
+                             titleBarHeight / 2,
+                             12,
+                             (titleBarHeight / 2) - 4,
+                             12,
+                             (titleBarHeight / 2) + 4,
+                             BLACK);
    }
 
    // draw exclamation mark behind titleBar text, when interrupts are disabled
    if (!areInterruptsEnbabled)
    {
-      display.print("!");
+      display().print("!");
    }
 
    // transfer buffer to display.
    if (draw)
    {
-      display.display();
+      display().display();
    }
 }
 
 void Activity::clearActivity(const int color, const boolean draw)
 {
    // clear activity layout by drawing a rectangle above it
-   display.fillRect(0,
-                    titleBarHeight,
-                    display.width(),
-                    display.height() - titleBarHeight,
-                    color);
+   display().fillRect(0,
+                      titleBarHeight,
+                      display().width(),
+                      display().height() - titleBarHeight,
+                      color);
    if (draw)
    {
-      display.display();
+      display().display();
    }
 }
 }  // namespace ActivityGUI

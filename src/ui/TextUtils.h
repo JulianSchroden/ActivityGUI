@@ -1,7 +1,7 @@
 /**
- *  Copyright (c) 2017-2018 Julian Schroden. All rights reserved.
+ *  Copyright (c) 2017-2019 Julian Schroden. All rights reserved.
  *  Licensed under the MIT License. See LICENSE file in the project root for
- * full license information.
+ *  full license information.
  */
 
 #ifndef _TEXTUTILS_h
@@ -13,9 +13,6 @@ namespace ActivityGUI
 {
 class Dimension
 {
-private:
-   int width, height;
-
 public:
    Dimension(int width, int height)
    {
@@ -30,6 +27,8 @@ public:
    {
       return height;
    }
+private:
+   int width, height;
 };
 
 class TextUtils

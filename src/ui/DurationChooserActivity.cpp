@@ -24,74 +24,6 @@ DurationChooserActivity::DurationChooserActivity(std::string title,
    seconds = duration;
 }
 
-void DurationChooserActivity::drawLayout()
-{
-   Activity::drawLayout();
-
-   uint8_t yMiddle = titleBarHeight + (display.height() - titleBarHeight) / 2;
-   uint8_t xMiddle = display.width() / 2;
-   uint8_t xThird = display.width() * 0.33333333f;
-
-   // clear content
-   display.fillRect(0, 30, display.width(), 30, BLACK);
-
-   // draw seperators
-   display.setTextColor(WHITE);
-   display.setTextSize(1);
-   display.setCursor(xThird + 4, yMiddle);
-   display.print(":");
-   display.setCursor(xThird * 2 - 4, yMiddle);
-   display.print(":");
-
-   switch (activeView)
-   {
-      case 0:
-         // draw the first view highlighted (hours)
-         display.setCursor(xThird - 22, yMiddle - 4);
-         display.setTextSize(2);
-         display.printf("%02d", hours);
-
-         display.setCursor(xMiddle - 4, yMiddle);
-         display.setTextSize(1);
-         display.printf("%02d", minutes);
-
-         display.setCursor(xThird * 2 + 6, yMiddle);
-         display.setTextSize(1);
-         display.printf("%02d", seconds);
-         break;
-      case 1:
-         // draw the second view highlighted (minutes)
-         display.setCursor(xThird - 14, yMiddle);
-         display.setTextSize(1);
-         display.printf("%02d", hours);
-
-         display.setCursor(xMiddle - 9, yMiddle - 4);
-         display.setTextSize(2);
-         display.printf("%02d", minutes);
-
-         display.setCursor(xThird * 2 + 6, yMiddle);
-         display.setTextSize(1);
-         display.printf("%02d", seconds);
-         break;
-      case 2:
-         // draw the third view highlighted (seconds)
-         display.setCursor(xThird - 14, yMiddle);
-         display.setTextSize(1);
-         display.printf("%02d", hours);
-
-         display.setCursor(xMiddle - 4, yMiddle);
-         display.setTextSize(1);
-         display.printf("%02d", minutes);
-
-         display.setCursor(xThird * 2 + 6, yMiddle - 4);
-         display.setTextSize(2);
-         display.printf("%02d", seconds);
-         break;
-   }
-
-   display.display();
-}
-
 void DurationChooserActivity::onScroll(int distance)
 {
    switch (activeView)
@@ -192,23 +124,72 @@ void DurationChooserActivity::setResult(ByteStack &bytes)
    bytes.push(duration);
 }
 
-void DurationChooserActivity::onStart()
+void DurationChooserActivity::drawLayout()
 {
-   Activity::onStart();
+   Activity::drawLayout();
+
+   uint8_t yMiddle = titleBarHeight + (display().height() - titleBarHeight) / 2;
+   uint8_t xMiddle = display().width() / 2;
+   uint8_t xThird = display().width() * 0.33333333f;
+
+   // clear content
+   display().fillRect(0, 30, display().width(), 30, BLACK);
+
+   // draw seperators
+   display().setTextColor(WHITE);
+   display().setTextSize(1);
+   display().setCursor(xThird + 4, yMiddle);
+   display().print(":");
+   display().setCursor(xThird * 2 - 4, yMiddle);
+   display().print(":");
+
+   switch (activeView)
+   {
+      case 0:
+         // draw the first view highlighted (hours)
+         display().setCursor(xThird - 22, yMiddle - 4);
+         display().setTextSize(2);
+         display().printf("%02d", hours);
+
+         display().setCursor(xMiddle - 4, yMiddle);
+         display().setTextSize(1);
+         display().printf("%02d", minutes);
+
+         display().setCursor(xThird * 2 + 6, yMiddle);
+         display().setTextSize(1);
+         display().printf("%02d", seconds);
+         break;
+      case 1:
+         // draw the second view highlighted (minutes)
+         display().setCursor(xThird - 14, yMiddle);
+         display().setTextSize(1);
+         display().printf("%02d", hours);
+
+         display().setCursor(xMiddle - 9, yMiddle - 4);
+         display().setTextSize(2);
+         display().printf("%02d", minutes);
+
+         display().setCursor(xThird * 2 + 6, yMiddle);
+         display().setTextSize(1);
+         display().printf("%02d", seconds);
+         break;
+      case 2:
+         // draw the third view highlighted (seconds)
+         display().setCursor(xThird - 14, yMiddle);
+         display().setTextSize(1);
+         display().printf("%02d", hours);
+
+         display().setCursor(xMiddle - 4, yMiddle);
+         display().setTextSize(1);
+         display().printf("%02d", minutes);
+
+         display().setCursor(xThird * 2 + 6, yMiddle - 4);
+         display().setTextSize(2);
+         display().printf("%02d", seconds);
+         break;
+   }
+
+   display().display();
 }
 
-void DurationChooserActivity::onPause()
-{
-   Activity::onPause();
-}
-
-void DurationChooserActivity::onResume()
-{
-   Activity::onResume();
-}
-
-void DurationChooserActivity::onDestroy()
-{
-   Activity::onDestroy();
-}
 }  // namespace ActivityGUI

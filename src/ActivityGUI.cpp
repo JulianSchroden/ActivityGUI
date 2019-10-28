@@ -1,86 +1,34 @@
 /**
- *  Copyright (c) 2017-2018 Julian Schroden. All rights reserved.
+ *  Copyright (c) 2017-2019 Julian Schroden. All rights reserved.
  *  Licensed under the MIT License. See LICENSE file in the project root for
- * full license information.
+ *  full license information.
  */
 
 #include "ActivityGUI.h"
 
-#include <SPI.h>
-#include <Wire.h>
-
-
-#define LED_BUILTIN 2
-
 namespace ActivityGUI
 {
-Adafruit_SSD1306 Runtime::display(LED_BUILTIN);
-std::stack<ActivityExecution *> Runtime::activityStack;
-std::list<Worker *> Runtime::workerList;
-ByteStack Runtime::resultBytes(16);
-
-volatile int Runtime::encoderCounter = 0;
-volatile long Runtime::currentButtonPressedTime = 0;
-volatile long Runtime::currentButtonReleasedTime = 0;
-
-Runtime &Runtime::getInstance()
+Runtime::Runtime(InputModule inputModule, Adafruit_SSD1306 display)
+    : inputModule_(std::move(inputModule))
+    , display_(std::move(display))
+    , resultBytes_(16)
 {
-   static Runtime Runtime;
-   return Runtime;
-}
+   inputModule_.onClick(
+       []() { activityStack.top()->getActivity()->onClick(); });
 
-Adafruit_SSD1306 &Runtime::getDisplay()
-{
-   return display;
+   inputModule_.onLongClick(
+       []() { activityStack.top()->getActivity()->onLongClick(); });
+   
+   inputModule_.onScroll([this](int distance) {
+      activityStack.top()->getActivity()->onScroll(distance);
+   });
 }
 
 void Runtime::runOnce()
 {
-   static int lastEncoderCounter = 0;
-   static long lastButtonPressedTime = 0;
+   inputModule_.runOnce();
 
-   // check encoder counter and trigger onScroll callback, when encoder has been
-   // turned
-   int scrollDifference = (encoderCounter - lastEncoderCounter);
-   if (scrollDifference != 0)
-   {
-      if (!activityStack.empty())
-      {
-         activityStack.top()->getActivity()->onScroll(scrollDifference);
-      }
-      lastEncoderCounter = encoderCounter;
-   }
-
-   // check button timestamps
-   if (currentButtonPressedTime != lastButtonPressedTime)
-   {  //
-      if (!digitalRead(BUTTON))
-      {  // if button is still pressed
-         if ((millis() - currentButtonPressedTime) > 1000)
-         {
-            if (!activityStack.empty())
-            {
-               activityStack.top()
-                   ->getActivity()
-                   ->onLongClick();  // trigger onLongClick callback
-            }
-            lastButtonPressedTime = currentButtonPressedTime;
-         }
-      }
-      else
-      {
-         if ((currentButtonReleasedTime - currentButtonPressedTime) > 10)
-         {
-            if (!activityStack.empty())
-            {
-               activityStack.top()
-                   ->getActivity()
-                   ->onClick();  // trigger onClick callback
-            }
-            lastButtonPressedTime = currentButtonPressedTime;
-         }
-      }
-   }
+#if 0
    // execute the workers in the workerList
    if (workerList.size() > 0)
    {
@@ -103,19 +51,18 @@ void Runtime::runOnce()
          }
       }
    }
+#endif
    yield();
 }
 
-void Runtime::startActivity(Activity *const activity)
+void Runtime::startActivity(std::unique_ptr<Activity> activity)
 {
-   ActivityExecution *execution = new ActivityExecution(activity);
-   pushActivity(execution);
+   pushActivity(new ActivityExecution(std::move(activity));
 }
 
 void Runtime::startActivityForResult(Activity *const activity, int8_t key)
 {
-   ActivityExecution *execution = new ActivityExecution(activity, key);
-   pushActivity(execution);
+   pushActivity(new ActivityExecution(std::move(activity), key));
 }
 
 void Runtime::stopActivity()
@@ -156,68 +103,19 @@ void Runtime::addWorker(Worker *const worker)
    workerList.push_back(worker);
 }
 
-Runtime::Runtime()
+Adafruit_SSD1306 &Runtime::display()
 {
-   pinMode(
-       BUTTON,
-       INPUT_PULLUP);  // when the Button is pushed, it results in a LOW reading
-   pinMode(ENCODER_A, INPUT);
-   pinMode(ENCODER_B, INPUT);
-   attachInterrupt(digitalPinToInterrupt(BUTTON), buttonCallback, CHANGE);
-   attachInterrupt(digitalPinToInterrupt(ENCODER_A), encoderCallBack, CHANGE);
-
-   // display init
-   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
-   display.display();
-   delay(1000);
-   display.clearDisplay();
+   return display_;
 }
 
-void Runtime::buttonCallback()
-{
-   if (!digitalRead(BUTTON))
-   {
-      if ((millis() - currentButtonPressedTime) >
-          100)  // software debounce: only respond to button press when it
-                // occurs 100ms after the last press
-         currentButtonPressedTime = millis();
-   }
-   else
-   {
-      if (millis() - currentButtonReleasedTime > 100)
-      {  // software debounce: only respond to button release when it occurs
-         // 100ms after the last release
-         currentButtonReleasedTime = millis();
-      }
-   }
-}
-
-void Runtime::encoderCallBack()
-{
-   static int lastA = 0;
-   int currentA = digitalRead(ENCODER_A);
-
-   if (currentA != lastA)
-   {
-      if (currentA != digitalRead(ENCODER_B))
-      {
-         encoderCounter++;
-      }
-      else
-      {
-         encoderCounter--;
-      }
-      lastA = currentA;
-   }
-}
-
-void Runtime::pushActivity(ActivityExecution *execution)
+void Runtime::pushActivity(std::unique_ptr<ActivityExecution> activityExecution)
 {
    if (!activityStack.empty())
    {
       activityStack.top()->getActivity()->onPause();
    }
-   activityStack.push(execution);
+   activityStack.push(std::move(activityExecution));
+   activityStack.top()->getActivity()->setRuntime(this);
    activityStack.top()->getActivity()->onStart();
 }
 
