@@ -48,7 +48,7 @@ public:
    //! it. A flag is set to tell the runtime, that the calling activity expects
    //! a result. Before starting the activity, the topmost activity is paused.
    //!
-   void startActivityForResult(std::unique_ptr<Activity> activity, int8_t key);
+   void startActivityForResult(std::unique_ptr<Activity> activity, uint8_t key);
 
    //!
    //!  Stops the topmost Activity and resumes the activity below.

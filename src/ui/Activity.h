@@ -123,6 +123,11 @@ protected:
                      int fontScale,
                      bool showArrowHome,
                      bool draw = false);
+   
+   //!
+   //! Get the titleBarHeight
+   //!
+   int titleBarHeight();
 
    //!
    //! Clear the display
@@ -138,10 +143,10 @@ protected:  // ToDo: should be private
    int titleFontScale_;
    bool showArrowHome_;
 
-   int titleBarHeight_ = 0;
    bool areInterruptsEnbabled_ = true;
 
 private:
+   int titleBarHeight_ = 0;
    Runtime *runtime_;
 };
 }  // namespace ActivityGUI

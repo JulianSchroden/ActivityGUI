@@ -12,7 +12,7 @@ EncoderInputModule::EncoderInputModule(Button button, Encoder encoder)
    encoder_.onScroll([this](int distance) { onScroll(distance); });
 }
 
-void PolledEncoderInputModule::runOnce()
+void EncoderInputModule::runOnce()
 {
    button_.update();
    encoder_.update();

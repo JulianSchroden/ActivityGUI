@@ -8,14 +8,9 @@
 
 #include "ActivityGUI.h"
 
-
 namespace ActivityGUI
 {
-Worker::Worker()
-{
-   // add the worker to the Runtime's worker list
-   Runtime::addWorker(this);
-}
+Worker::Worker() {}
 
 Worker::~Worker() {}
 

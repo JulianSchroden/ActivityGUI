@@ -128,7 +128,7 @@ void DurationChooserActivity::drawLayout()
 {
    Activity::drawLayout();
 
-   uint8_t yMiddle = titleBarHeight + (display().height() - titleBarHeight) / 2;
+   uint8_t yMiddle = titleBarHeight() + (display().height() - titleBarHeight()) / 2;
    uint8_t xMiddle = display().width() / 2;
    uint8_t xThird = display().width() * 0.33333333f;
 

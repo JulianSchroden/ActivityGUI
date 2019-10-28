@@ -15,10 +15,10 @@ Runtime::Runtime(std::unique_ptr<InputModule> inputModule,
     , resultBytes_(16)
 {
    inputModule_->onClick(
-       []() { activityStack.top()->getActivity()->onClick(); });
+       [this]() { activityStack.top()->getActivity()->onClick(); });
 
    inputModule_->onLongClick(
-       []() { activityStack.top()->getActivity()->onLongClick(); });
+       [this]() { activityStack.top()->getActivity()->onLongClick(); });
 
    inputModule_->onScroll([this](int distance) {
       activityStack.top()->getActivity()->onScroll(distance);
@@ -27,7 +27,7 @@ Runtime::Runtime(std::unique_ptr<InputModule> inputModule,
 
 void Runtime::runOnce()
 {
-   inputModule_.runOnce();
+   inputModule_->runOnce();
 
 #if 0
    // execute the workers in the workerList
@@ -58,12 +58,12 @@ void Runtime::runOnce()
 
 void Runtime::startActivity(std::unique_ptr<Activity> activity)
 {
-   pushActivity(new ActivityExecution(std::move(activity));
+   pushActivity(new ActivityExecution(std::move(activity)));
 }
 
-void Runtime::startActivityForResult(Activity *const activity, int8_t key)
+void Runtime::startActivityForResult(Activity *const activity, uint8_t key)
 {
-   pushActivity(new ActivityExecution(std::move(activity), key));
+   pushActivity(new ActivityExecution(std::move(activity), true, key));
 }
 
 void Runtime::stopActivity()

@@ -80,7 +80,7 @@ void Activity::drawTitleBar(std::string title,
 {
    // draw titleBar background
    Dimension dim = TextUtils::getTextBounds(title, fontScale);
-   titleBarHeight = dim.getHeight() + 4;
+   titleBarHeight_ = dim.getHeight() + 4;
    display().fillRect(0, 0, display().width(), dim.getHeight() + 4, WHITE);
 
    // print titleBar text
@@ -93,11 +93,11 @@ void Activity::drawTitleBar(std::string title,
    if (showArrowHome)
    {
       display().fillTriangle(4,
-                             titleBarHeight / 2,
+                             titleBarHeight_ / 2,
                              12,
-                             (titleBarHeight / 2) - 4,
+                             (titleBarHeight_ / 2) - 4,
                              12,
-                             (titleBarHeight / 2) + 4,
+                             (titleBarHeight_ / 2) + 4,
                              BLACK);
    }
 
@@ -118,9 +118,9 @@ void Activity::clearActivity(const int color, const boolean draw)
 {
    // clear activity layout by drawing a rectangle above it
    display().fillRect(0,
-                      titleBarHeight,
+                      titleBarHeight_,
                       display().width(),
-                      display().height() - titleBarHeight,
+                      display().height() - titleBarHeight_,
                       color);
    if (draw)
    {

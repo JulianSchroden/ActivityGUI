@@ -54,7 +54,7 @@ void AttributeChooserActivity::drawLayout()
    Activity::drawLayout();
 
    // draw a triangle which points at the selected attribute
-   int16_t yMiddle = titleBarHeight + (display().height() - titleBarHeight) / 2;
+   int16_t yMiddle = titleBarHeight() + (display().height() - titleBarHeight()) / 2;
    display().fillTriangle(16, yMiddle - 5, 26, yMiddle, 16, yMiddle + 5, WHITE);
 
    std::vector<AttributeChoice>::iterator itemsIT = items.begin();
@@ -64,16 +64,16 @@ void AttributeChooserActivity::drawLayout()
    // print the options
    display().setTextColor(WHITE);
    display().fillRect(36,
-                      titleBarHeight,
+                      titleBarHeight(),
                       display().width() - 36,
-                      display().height() - titleBarHeight,
+                      display().height() - titleBarHeight(),
                       BLACK);
    for (int8_t i = 0; i < 4 && itemsIT != items.end(); i++)
    {
       if (i != 0 || i == 0 && selectedItem != 0)
       {  // skip the first position, when the first item is selected
          display().setCursor(36, yMiddle - 2 + (i - 1) * 14);
-         display().print(itemsIT->getTitle().c_str());
+         display().print(itemsIT->title().c_str());
          itemsIT++;
       }
    }
