@@ -8,18 +8,19 @@
 
 namespace ActivityGUI
 {
-Runtime::Runtime(InputModule inputModule, Adafruit_SSD1306 display)
+Runtime::Runtime(std::unique_ptr<InputModule> inputModule,
+                 Adafruit_SSD1306 display)
     : inputModule_(std::move(inputModule))
     , display_(std::move(display))
     , resultBytes_(16)
 {
-   inputModule_.onClick(
+   inputModule_->onClick(
        []() { activityStack.top()->getActivity()->onClick(); });
 
-   inputModule_.onLongClick(
+   inputModule_->onLongClick(
        []() { activityStack.top()->getActivity()->onLongClick(); });
-   
-   inputModule_.onScroll([this](int distance) {
+
+   inputModule_->onScroll([this](int distance) {
       activityStack.top()->getActivity()->onScroll(distance);
    });
 }

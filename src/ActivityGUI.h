@@ -29,7 +29,7 @@ public:
    //!
    //! Create a Runtime instance.
    //!
-   Runtime(InputModule inputModule, Adafruit_SSD1306 display);
+   Runtime(std::unique_ptr<InputModule> inputModule, Adafruit_SSD1306 display);
 
    //!
    //! Perform the Runtime's work
@@ -72,12 +72,11 @@ private:
    void pushActivity(std::unique_ptr<ActivityExecution> activityExecution);
 
 private:
-   InputModule inputModule_;
+   std::unique_ptr<InputModule> inputModule_;
    Adafruit_SSD1306 display_;
    ByteStack resultBytes_;
    std::stack<std::unique_ptr<ActivityExecution>> activityStack;
    std::list<Worker *> workerList;
-   
 };
 }  // namespace ActivityGUI
 
