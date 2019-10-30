@@ -8,6 +8,7 @@
 
 #include "shim/make_unique.h"
 
+
 namespace ActivityGUI
 {
 Runtime::Runtime(std::unique_ptr<InputModule> inputModule,
@@ -16,14 +17,25 @@ Runtime::Runtime(std::unique_ptr<InputModule> inputModule,
     , display_(std::move(display))
     , resultBytes_(16)
 {
-   inputModule_->onClick(
-       [this]() { activityStack.top()->activity()->onClick(); });
+   inputModule_->onClick([this]() {
+      if (!activityStack.empty())
+      {
+         activityStack.top()->activity()->onClick();
+      }
+   });
 
-   inputModule_->onLongClick(
-       [this]() { activityStack.top()->activity()->onLongClick(); });
+   inputModule_->onLongClick([this]() {
+      if (!activityStack.empty())
+      {
+         activityStack.top()->activity()->onLongClick();
+      }
+   });
 
    inputModule_->onScroll([this](int distance) {
-      activityStack.top()->activity()->onScroll(distance);
+      if (!activityStack.empty())
+      {
+         activityStack.top()->activity()->onScroll(distance);
+      }
    });
 }
 
