@@ -5,6 +5,7 @@
  */
 
 #include "ActivityGUI.h"
+#include "shim/make_unique.h"
 
 namespace ActivityGUI
 {
