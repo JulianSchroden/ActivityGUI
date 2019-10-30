@@ -5,12 +5,13 @@
  */
 
 #include "ActivityGUI.h"
+
 #include "shim/make_unique.h"
 
 namespace ActivityGUI
 {
 Runtime::Runtime(std::unique_ptr<InputModule> inputModule,
-                 Adafruit_SSD1306 display)
+                 std::unique_ptr<Adafruit_SSD1306> display)
     : inputModule_(std::move(inputModule))
     , display_(std::move(display))
     , resultBytes_(16)
@@ -105,7 +106,7 @@ void Runtime::addWorker(Worker *const worker)
 
 Adafruit_SSD1306 &Runtime::display()
 {
-   return display_;
+   return *display_.get();
 }
 
 void Runtime::pushActivity(std::unique_ptr<ActivityExecution> activityExecution)
