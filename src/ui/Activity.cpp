@@ -9,18 +9,21 @@
 #include "../ActivityGUI.h"
 #include "TextUtils.h"
 
+
 namespace ActivityGUI
 {
 Activity::Activity(std::string title,
                    bool showTitleBar,
                    int titleFontScale,
-                   bool showArrowHome),
-    title(std::move(title)), showTitleBar(showTitleBar),
-    titleFontScale(titleFontScale), showArrowHome(showArrowHome)
+                   bool showArrowHome)
+    : title_(std::move(title))
+    , showTitleBar_(showTitleBar)
+    , titleFontScale_(titleFontScale)
+    , showArrowHome_(showArrowHome)
 {
 }
 
-void setRuntime(Runtime *runtime)
+void Activity::setRuntime(Runtime *runtime)
 {
    runtime_ = runtime;
 }
@@ -67,9 +70,9 @@ Adafruit_SSD1306 &Activity::display()
 
 void Activity::drawLayout()
 {
-   if (showTitleBar)
+   if (showTitleBar_)
    {
-      drawTitleBar(title, titleFontScale, showArrowHome);
+      drawTitleBar(title_, titleFontScale_, showArrowHome_);
    }
 }
 
@@ -102,7 +105,7 @@ void Activity::drawTitleBar(std::string title,
    }
 
    // draw exclamation mark behind titleBar text, when interrupts are disabled
-   if (!areInterruptsEnbabled)
+   if (!areInterruptsEnbabled_)
    {
       display().print("!");
    }
