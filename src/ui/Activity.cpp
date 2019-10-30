@@ -117,6 +117,11 @@ void Activity::drawTitleBar(std::string title,
    }
 }
 
+int Activity::titleBarHeight()
+{
+   return titleBarHeight_;
+}
+
 void Activity::clearActivity(const int color, const boolean draw)
 {
    // clear activity layout by drawing a rectangle above it
