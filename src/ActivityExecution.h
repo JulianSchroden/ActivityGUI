@@ -30,7 +30,7 @@ public:
    //!
    //! Get a pointer to the activity
    //!
-   Activity *getActivity() const;
+   Activity *activity() const;
 
    //!
    //! Check if the activity should return a result.
@@ -38,9 +38,9 @@ public:
    const bool isResultExpected() const;
 
    //!
-   //! Get the Result key
+   //! Get the result key
    //!
-   const int8_t getResultKey() const;
+   const int8_t resultKey() const;
 
 private:
    std::unique_ptr<Activity> activity_;

@@ -17,7 +17,7 @@ ActivityExecution::ActivityExecution(std::unique_ptr<Activity> activity,
 {
 }
 
-Activity *ActivityExecution::getActivity() const
+Activity *ActivityExecution::activity() const
 {
    return activity_.get();
 }
@@ -27,7 +27,7 @@ const bool ActivityExecution::isResultExpected() const
    return isResultExpected_;
 }
 
-const int8_t ActivityExecution::getResultKey() const
+const int8_t ActivityExecution::resultKey() const
 {
    return resultKey_;
 }

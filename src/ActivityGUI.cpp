@@ -15,13 +15,13 @@ Runtime::Runtime(std::unique_ptr<InputModule> inputModule,
     , resultBytes_(16)
 {
    inputModule_->onClick(
-       [this]() { activityStack.top()->getActivity()->onClick(); });
+       [this]() { activityStack.top()->activity()->onClick(); });
 
    inputModule_->onLongClick(
-       [this]() { activityStack.top()->getActivity()->onLongClick(); });
+       [this]() { activityStack.top()->activity()->onLongClick(); });
 
    inputModule_->onScroll([this](int distance) {
-      activityStack.top()->getActivity()->onScroll(distance);
+      activityStack.top()->activity()->onScroll(distance);
    });
 }
 
@@ -58,44 +58,42 @@ void Runtime::runOnce()
 
 void Runtime::startActivity(std::unique_ptr<Activity> activity)
 {
-   pushActivity(new ActivityExecution(std::move(activity)));
+   pushActivity(std::make_unique<ActivityExecution>(std::move(activity)));
 }
 
-void Runtime::startActivityForResult(Activity *const activity, uint8_t key)
+void Runtime::startActivityForResult(std::unique_ptr<Activity> activity,
+                                     uint8_t key)
 {
-   pushActivity(new ActivityExecution(std::move(activity), true, key));
+   pushActivity(
+       std::make_unique<ActivityExecution>(std::move(activity), true, key));
 }
 
 void Runtime::stopActivity()
 {
    if (activityStack.size() > 1)
    {
-      ActivityExecution *execution = activityStack.top();
-      Activity *activity = execution->getActivity();
-
-      // set a result if the underlying Activity expects it
-      if (execution->isResultExpected())
-      {
-         resultBytes.reset();  // reset the container to prevent interferences
-                               // with previous data
-         activity->setResult(resultBytes);  // pass result container
-      }
-
-      // call onDestroy and remove activityExecution from stack
-      activity->onDestroy();
+      auto activityExecution = std::move(activityStack.top());
       activityStack.pop();
 
-      // pass result to Activity if it is expected
-      if (execution->isResultExpected())
-      {
-         activityStack.top()->getActivity()->onActivityResult(
-             resultBytes, execution->getResultKey());  // pass container and key
-      }
-      activityStack.top()->getActivity()->onResume();
+      Activity *activity = activityExecution->activity();
 
-      // free alloced memory
-      delete activity;
-      delete execution;
+      // set a result if the underlying Activity expects it
+      if (activityExecution->isResultExpected())
+      {
+         resultBytes_.reset();  // reset the container to prevent interferences
+                                // with previous data
+         activity->setResult(resultBytes_);
+      }
+
+      activity->onDestroy();
+
+      // pass result to Activity if it is expected
+      if (activityExecution->isResultExpected())
+      {
+         activityStack.top()->activity()->onActivityResult(
+             resultBytes_, activityExecution->resultKey());
+      }
+      activityStack.top()->activity()->onResume();
    }
 }
 
@@ -113,11 +111,11 @@ void Runtime::pushActivity(std::unique_ptr<ActivityExecution> activityExecution)
 {
    if (!activityStack.empty())
    {
-      activityStack.top()->getActivity()->onPause();
+      activityStack.top()->activity()->onPause();
    }
    activityStack.push(std::move(activityExecution));
-   activityStack.top()->getActivity()->setRuntime(this);
-   activityStack.top()->getActivity()->onStart();
+   activityStack.top()->activity()->setRuntime(this);
+   activityStack.top()->activity()->onStart();
 }
 
 }  // namespace ActivityGUI
