@@ -104,8 +104,9 @@ void Activity::drawTitleBar(std::string title,
                              BLACK);
    }
 
-   // draw exclamation mark behind titleBar text, when interrupts are disabled
-   if (!areInterruptsEnbabled_)
+   // draw exclamation mark behind titleBar text, to idicate that the ui might
+   // be unresponsive
+   if (uiFreezeIndicator_ == UIFreezeIndicator::Visible)
    {
       display().print("!");
    }
@@ -115,11 +116,6 @@ void Activity::drawTitleBar(std::string title,
    {
       display().display();
    }
-}
-
-int Activity::titleBarHeight()
-{
-   return titleBarHeight_;
 }
 
 void Activity::clearActivity(const int color, const boolean draw)
@@ -135,4 +131,20 @@ void Activity::clearActivity(const int color, const boolean draw)
       display().display();
    }
 }
+
+std::string Activity::title()
+{
+   return title_;
+}
+
+int Activity::titleBarHeight()
+{
+   return titleBarHeight_;
+}
+
+void Activity::setUIFreezeIndicator(UIFreezeIndicator uiFreezeIndicator)
+{
+   uiFreezeIndicator_ = uiFreezeIndicator;
+}
+
 }  // namespace ActivityGUI

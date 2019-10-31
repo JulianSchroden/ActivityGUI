@@ -19,6 +19,12 @@ namespace ActivityGUI
 {
 class Runtime;
 
+enum class UIFreezeIndicator
+{
+   Hidden,
+   Visible,
+};
+
 class Activity
 {
 public:
@@ -123,11 +129,6 @@ protected:
                      int fontScale,
                      bool showArrowHome,
                      bool draw = false);
-   
-   //!
-   //! Get the titleBarHeight
-   //!
-   int titleBarHeight();
 
    //!
    //! Clear the display
@@ -137,17 +138,33 @@ protected:
    //!
    void clearActivity(const int color = BLACK, boolean draw = true);
 
-protected:  // ToDo: should be private
+protected:
+   //!
+   //! Get the activity title
+   //!
+   std::string title();
+
+   //!
+   //! Get the titleBarHeight
+   //!
+   int titleBarHeight();
+
+   //!
+   //! Set the UIFreezeIndicator
+   //! The \a uiFreezeIndicator can be set in advance of a blocking code block
+   //! which will result in the ui not be responsive to the user's input.
+   void setUIFreezeIndicator(UIFreezeIndicator uiFreezeIndicator);
+
+private:
    std::string title_;
    bool showTitleBar_;
    int titleFontScale_;
    bool showArrowHome_;
 
-   bool areInterruptsEnbabled_ = true;
-
-private:
-   int titleBarHeight_ = 0;
    Runtime *runtime_;
+
+   UIFreezeIndicator uiFreezeIndicator_ = UIFreezeIndicator::Hidden;
+   int titleBarHeight_ = 0;
 };
 }  // namespace ActivityGUI
 
