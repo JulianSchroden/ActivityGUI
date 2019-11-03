@@ -6,6 +6,9 @@
 
 #include "AttributeChooserActivity.h"
 
+#include "../utils/Logger.h"
+
+
 namespace ActivityGUI
 {
 AttributeChooserActivity::AttributeChooserActivity(
@@ -34,7 +37,9 @@ void AttributeChooserActivity::onScroll(int distance)
    {
       selectedItem = selectedItem % items.size();
    }
-   Serial.printf("selected = %d\n", selectedItem);
+
+   LOG_D("Selected item = %d", selectedItem);
+
    // only draw the layout, when it has been changed
    if (selectedItem != lastSelectedItem)
    {
@@ -54,7 +59,8 @@ void AttributeChooserActivity::drawLayout()
    Activity::drawLayout();
 
    // draw a triangle which points at the selected attribute
-   int16_t yMiddle = titleBarHeight() + (display().height() - titleBarHeight()) / 2;
+   int16_t yMiddle =
+       titleBarHeight() + (display().height() - titleBarHeight()) / 2;
    display().fillTriangle(16, yMiddle - 5, 26, yMiddle, 16, yMiddle + 5, WHITE);
 
    std::vector<AttributeChoice>::iterator itemsIT = items.begin();

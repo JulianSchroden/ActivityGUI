@@ -6,6 +6,9 @@
 
 #include "ListActivity.h"
 
+#include "../utils/Logger.h"
+
+
 namespace ActivityGUI
 {
 ListActivity::ListActivity(std::vector<std::string> items,
@@ -32,7 +35,7 @@ void ListActivity::onScroll(int distance)
       selectedItem = selectedItem % listItems.size();
    }
 
-   Serial.printf("Selected Item=%d\n", selectedItem);
+   LOG_D("Selected Item = %d", selectedItem);
 
    // only draw the layout, when it has been changed
    if (selectedItem != lastSelectedItem)
