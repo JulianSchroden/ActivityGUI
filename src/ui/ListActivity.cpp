@@ -17,51 +17,34 @@ ListActivity::ListActivity(std::vector<std::string> items,
                            int titleFontScale,
                            bool showArrowHome)
     : Activity(std::move(title), showTitleBar, titleFontScale, showArrowHome)
-    , listItems(std::move(items))
+    , listItems_(std::move(items))
 {
 }
 
 void ListActivity::onScroll(int distance)
 {
-   selectedItem += distance;
+   selectedItem_ += distance;
    // jump to end, when user scrolls past the first element
-   if (selectedItem < 0)
+   if (selectedItem_ < 0)
    {
-      selectedItem = listItems.size() + selectedItem;
+      selectedItem_ = listItems_.size() + selectedItem_;
    }
    // jump to start, when user scrolls past the last element
-   else if (selectedItem >= listItems.size())
+   else if (selectedItem_ >= listItems_.size())
    {
-      selectedItem = selectedItem % listItems.size();
+      selectedItem_ = selectedItem_ % listItems_.size();
    }
 
-   LOG_D("Selected Item = %d", selectedItem);
+   LOG_D("Selected Item = %d", selectedItem_);
 
-   // only draw the layout, when it has been changed
-   if (selectedItem != lastSelectedItem)
-   {
-      selectionIndicator = selectedItem;
-      if (selectionIndicator > visibleItemCount - 1)
-      {
-         selectionIndicator = visibleItemCount - 1;
-      }
-      drawSelectionIndicator(selectionIndicator);
-      drawScrollIndicator();
-      // redraw list layout, when user scrolls past the last visible item
-      if ((selectedItem > selectionIndicator) ||
-          (selectedItem < visibleItemCount &&
-           lastSelectedItem >= visibleItemCount))
-      {
-         drawLayout();
-      }
+   drawLayout();
 
-      lastSelectedItem = selectedItem;
-   }
+   lastSelectedItem_ = selectedItem_;
 }
 
 void ListActivity::onClick()
 {
-   onItemClick(selectedItem);
+   onItemClick(selectedItem_);
 }
 
 void ListActivity::onItemClick(int index) {}
@@ -69,142 +52,150 @@ void ListActivity::onItemClick(int index) {}
 void ListActivity::onStart()
 {
    // calculate the number of visible items
-   visibleItemCount =
-       ((display().height() - titleBarHeight()) / listItemHeight);
-   maxIndex = listItems.size() - 1;
+   visibleItemCount_ =
+       ((display().height() - titleBarHeight()) / listItemHeight_);
+   maxIndex_ = listItems_.size() - 1;
 
    Activity::onStart();
 }
 
-void ListActivity::drawLayout()
+void ListActivity::drawLayout(DrawMode drawMode)
 {
-   Activity::drawLayout();
+   Activity::drawLayout(DrawMode::BufferOnly);
 
-   auto newIT = listItems.begin();
+   selectionIndicator_ = selectedItem_;
+   if (selectionIndicator_ > visibleItemCount_ - 1)
+   {
+      selectionIndicator_ = visibleItemCount_ - 1;
+   }
+
+   auto newIT = listItems_.begin();
    // adavance list iterator to new startIndex
-   std::advance(newIT, selectedItem - selectionIndicator);
+   std::advance(newIT, selectedItem_ - selectionIndicator_);
 
    display().setTextColor(WHITE);
    display().setTextSize(1);
 
-   for (int i = 0; i <= visibleItemCount; i++)
+   for (int i = 0; i <= visibleItemCount_; ++i)
    {
       // erase old text by drawing a black rectangle above it
-      display().fillRect(listItemHeight + 4,
-                         titleBarHeight() + i * listItemHeight + 3,
-                         display().width() - listItemHeight - 4 - 8,
-                         listItemHeight - 5,
+      display().fillRect(listItemHeight_ + 4,
+                         titleBarHeight() + i * listItemHeight_ + 3,
+                         display().width() - listItemHeight_ - 4 - 8,
+                         listItemHeight_ - 5,
                          BLACK);
 
-      if (newIT != listItems.end())
+      if (newIT != listItems_.end())
       {
          // draw indicator background
          display().drawRect(4,
-                            titleBarHeight() + i * listItemHeight + 2,
-                            listItemHeight - 4,
-                            listItemHeight - 4,
+                            titleBarHeight() + i * listItemHeight_ + 2,
+                            listItemHeight_ - 4,
+                            listItemHeight_ - 4,
                             WHITE);
          // draw text
-         display().setCursor(listItemHeight + 4,
-                             titleBarHeight() + i * listItemHeight + 3);
+         display().setCursor(listItemHeight_ + 4,
+                             titleBarHeight() + i * listItemHeight_ + 3);
          display().println(newIT->c_str());
          // Draw list seperator
          display().drawFastHLine(0,
-                                 titleBarHeight() + (i + 1) * listItemHeight,
-                                 display().width() - scrollBarWidth,
+                                 titleBarHeight() + (i + 1) * listItemHeight_,
+                                 display().width() - scrollBarWidth_,
                                  WHITE);
-         newIT++;
+         ++newIT;
       }
    }
    // deleting the last indicator background, when the last item is selected
-   if (selectedItem == maxIndex)
+   if (selectedItem_ == maxIndex_)
    {
       display().drawRect(
           4,
-          titleBarHeight() + visibleItemCount * listItemHeight + 2,
-          listItemHeight - 4,
-          listItemHeight - 4,
+          titleBarHeight() + visibleItemCount_ * listItemHeight_ + 2,
+          listItemHeight_ - 4,
+          listItemHeight_ - 4,
           BLACK);
    }
    // redrawing the last indicator background, when the item before is selected
-   else if (selectedItem == maxIndex - 1)
+   else if (selectedItem_ == maxIndex_ - 1)
    {
       display().drawRect(
           4,
-          titleBarHeight() + visibleItemCount * listItemHeight + 2,
-          listItemHeight - 4,
-          listItemHeight - 4,
+          titleBarHeight() + visibleItemCount_ * listItemHeight_ + 2,
+          listItemHeight_ - 4,
+          listItemHeight_ - 4,
           WHITE);
    }
 
-   drawSelectionIndicator(selectionIndicator, false);
-   drawScrollIndicator(false);
-   display().display();  // lasts about 112ms
-   //  1881 microseoconds to draw to buffer
-   // 113645 micros to transfer buffer
+   drawselectionIndicator(DrawMode::BufferOnly);
+   drawScrollIndicator(DrawMode::BufferOnly);
+   if (drawMode == DrawMode::TransferBuffer)
+   {
+      display().display();
+   }
 }
 
-void ListActivity::drawScrollIndicator(const boolean draw)
+void ListActivity::drawScrollIndicator(DrawMode drawMode)
 {
    // draw background
-   display().fillRect(display().width() - scrollBarWidth,
+   display().fillRect(display().width() - scrollBarWidth_,
                       titleBarHeight(),
-                      scrollBarWidth,
+                      scrollBarWidth_,
                       display().height() - titleBarHeight(),
                       WHITE);
 
    // draw arrows
    display().fillTriangle(
-       display().width() - scrollBarWidth + 1,
+       display().width() - scrollBarWidth_ + 1,
        titleBarHeight() + 3,
-       display().width() - ceil((float)scrollBarWidth / 2.0f),
+       display().width() - ceil((float)scrollBarWidth_ / 2.0f),
        titleBarHeight(),
        display().width() - 2,
        titleBarHeight() + 3,
        BLACK);
    display().fillTriangle(
-       display().width() - scrollBarWidth + 1,
+       display().width() - scrollBarWidth_ + 1,
        display().height() - 4,
-       display().width() - ceil((float)scrollBarWidth / 2.0f),
+       display().width() - ceil((float)scrollBarWidth_ / 2.0f),
        display().height() - 2,
        display().width() - 2,
        display().height() - 4,
        BLACK);
 
    // draw Indicator
-   int x = display().width() - ceil((float)scrollBarWidth / 2.0f) -
-           (indicatorWidth / 2);
+   int x = display().width() - ceil((float)scrollBarWidth_ / 2.0f) -
+           (indicatorWidth_ / 2);
    int y = titleBarHeight() + 5 +
-           ((float)selectedItem / (float)maxIndex) *
+           ((float)selectedItem_ / (float)maxIndex_) *
                (display().height() - titleBarHeight() - 11) -
-           ((float)selectedItem / (float)maxIndex) * 5.0f;
-   display().fillRect(x, y, 3, 6, BLACK);
-   if (draw)
+           ((float)selectedItem_ / (float)maxIndex_) * 5.0f;
+   display().fillRect(x, y, indicatorWidth_, indicatorHeight_, BLACK);
+   if (drawMode == DrawMode::TransferBuffer)
    {
       display().display();
    }
 }
 
-void ListActivity::drawSelectionIndicator(const int index, const boolean draw)
+void ListActivity::drawSelectionIndicator(DrawMode drawMode)
 {
    // remove indicator of last selected item
    display().fillRect(
        6,
-       titleBarHeight() + lastSelectionIndicator * listItemHeight + 4,
-       listItemHeight - 8,
-       listItemHeight - 8,
+       titleBarHeight() + lastselectionIndicator_ * listItemHeight_ + 4,
+       listItemHeight_ - 8,
+       listItemHeight_ - 8,
        BLACK);
    // draw indicator of the current selected item
-   display().fillRect(6,
-                      titleBarHeight() + index * listItemHeight + 4,
-                      listItemHeight - 8,
-                      listItemHeight - 8,
-                      WHITE);
-   if (draw)
+   display().fillRect(
+       6,
+       titleBarHeight() + selectionIndicator_ * listItemHeight_ + 4,
+       listItemHeight_ - 8,
+       listItemHeight_ - 8,
+       WHITE);
+   if (drawMode == DrawMode::TransferBuffer)
    {
       display().display();
    }
-   lastSelectionIndicator = index;
+   lastselectionIndicator_ = selectionIndicator_;
 }
 
 }  // namespace ActivityGUI

@@ -41,41 +41,39 @@ public:
    void onStart() override;
 
 protected:
-   void drawLayout() override;
+   void drawLayout(DrawMode drawMode = DrawMode::TransferBuffer) override;
 
    //!
    //! Helper method to draw the scroll indicator.
-   //! The \a draw parameter indicates whether the display buffer should be
-   //! transferred to the display
+   //! The \a drawMode parameter indicates whether the display buffer should be
+   //! transferred to the display.
    //!
-   void drawScrollIndicator(const boolean draw = true);
+   void drawScrollIndicator(DrawMode drawMode = DrawMode::TransferBuffer);
 
    //!
    //! Helper method to draw the selection indicator.
    //! Sets the lastSelectionIndicator to the passed \a index.
-   //! The \a draw parameter indicates whether the display buffer should be
-   //! transferred to the display
+   //! The \a drawMode parameter indicates whether the display buffer should be
+   //! transferred to the display.
    //!
-   void drawSelectionIndicator(const int index, const boolean draw = true);
-
-protected:  // ToDo: should be private
-   std::vector<std::string> listItems;
-   int selectedItem = 0;  // index of the current selected item
+   void drawSelectionIndicator(DrawMode drawMode = DrawMode::TransferBuffer);
 
 private:
-   int lastSelectedItem = 0;  // index of the last selected item
+   std::vector<std::string> listItems_;
+   int selectedItem_ = 0;      // index of the current selected item
+   int lastSelectedItem_ = 0;  // index of the last selected item
 
-   int selectionIndicator = 0;  // current position of the selection indicator
-   int lastSelectionIndicator = 0;  // last position of the selection indicator
+   int selectionIndicator_ = 0;  // current position of the selection indicator
+   int lastSelectionIndicator_ = 0;  // last position of the selection indicator
 
-   int maxIndex;          // maximum list index
-   int visibleItemCount;  // number of list items, which fit on the screen
+   int maxIndex_;          // maximum list index
+   int visibleItemCount_;  // number of list items, which fit on the screen
 
    // repeatedly used constants to draw the layout
-   int listItemHeight = TextUtils::getTextBounds("T", 1).getHeight() + 5;
-   const int scrollBarWidth = 7;
-   const int indicatorHeight = 5;
-   const int indicatorWidth = 3;
+   int listItemHeight_ = TextUtils::getTextBounds("T", 1).getHeight() + 5;
+   const int scrollBarWidth_ = 7;
+   const int indicatorWidth_ = 3;
+   const int indicatorHeight_ = 6;
 };
 }  // namespace ActivityGUI
 
