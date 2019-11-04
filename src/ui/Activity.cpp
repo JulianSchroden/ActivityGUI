@@ -68,18 +68,18 @@ Adafruit_SSD1306 &Activity::display()
    return runtime_->display();
 }
 
-void Activity::drawLayout()
+void Activity::drawLayout(DrawMode drawMode)
 {
    if (showTitleBar_)
    {
-      drawTitleBar(title_, titleFontScale_, showArrowHome_);
+      drawTitleBar(title_, titleFontScale_, showArrowHome_, drawMode);
    }
 }
 
 void Activity::drawTitleBar(std::string title,
                             int fontScale,
                             bool showArrowHome,
-                            bool draw)
+                            DrawMode drawMode)
 {
    // draw titleBar background
    Dimension dim = TextUtils::getTextBounds(title, fontScale);
@@ -112,13 +112,13 @@ void Activity::drawTitleBar(std::string title,
    }
 
    // transfer buffer to display.
-   if (draw)
+   if (drawMode == DrawMode::TransferBuffer)
    {
       display().display();
    }
 }
 
-void Activity::clearActivity(const int color, const boolean draw)
+void Activity::clearActivity(const int color, DrawMode drawMode)
 {
    // clear activity layout by drawing a rectangle above it
    display().fillRect(0,
@@ -126,7 +126,7 @@ void Activity::clearActivity(const int color, const boolean draw)
                       display().width(),
                       display().height() - titleBarHeight_,
                       color);
-   if (draw)
+   if (drawMode == DrawMode::TransferBuffer)
    {
       display().display();
    }

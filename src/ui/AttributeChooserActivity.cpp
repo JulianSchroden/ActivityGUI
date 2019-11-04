@@ -19,53 +19,53 @@ AttributeChooserActivity::AttributeChooserActivity(
     int titleFontScale,
     bool showArrowHome)
     : Activity(std::move(title), showTitleBar, titleFontScale, showArrowHome)
-    , items(std::move(items))
-    , selectedItem(selected)
+    , items_(std::move(items))
+    , selectedItem_(selected)
 {
 }
 
 void AttributeChooserActivity::onScroll(int distance)
 {
-   selectedItem += distance;
+   selectedItem_ += distance;
    // jump to end, when user scrolls past the first element
-   if (selectedItem < 0)
+   if (selectedItem_ < 0)
    {
-      selectedItem = items.size() + selectedItem;
+      selectedItem_ = items_.size() + selectedItem_;
    }
    // jump to start, when user scrolls past the last element
-   else if (selectedItem >= items.size())
+   else if (selectedItem_ >= items_.size())
    {
-      selectedItem = selectedItem % items.size();
+      selectedItem_ = selectedItem_ % items_.size();
    }
 
-   LOG_D("Selected item = %d", selectedItem);
+   LOG_D("Selected item = %d", selectedItem_);
 
    // only draw the layout, when it has been changed
-   if (selectedItem != lastSelectedItem)
+   if (selectedItem_ != lastSelectedItem_)
    {
       drawLayout();
    }
-   lastSelectedItem = selectedItem;
+   lastSelectedItem_ = selectedItem_;
 }
 
 void AttributeChooserActivity::setResult(ByteStack &bytes)
 {
    // store index of the selected item in the ByteStack
-   bytes.push(selectedItem);
+   bytes.push(selectedItem_);
 }
 
-void AttributeChooserActivity::drawLayout()
+void AttributeChooserActivity::drawLayout(DrawMode drawMode)
 {
-   Activity::drawLayout();
+   Activity::drawLayout(DrawMode::BufferOnly);
 
    // draw a triangle which points at the selected attribute
    int16_t yMiddle =
        titleBarHeight() + (display().height() - titleBarHeight()) / 2;
    display().fillTriangle(16, yMiddle - 5, 26, yMiddle, 16, yMiddle + 5, WHITE);
 
-   std::vector<AttributeChoice>::iterator itemsIT = items.begin();
+   std::vector<AttributeChoice>::iterator itemsIT = items_.begin();
    // adavance list iterator to the new start-index
-   std::advance(itemsIT, selectedItem - 1 >= 0 ? selectedItem - 1 : 0);
+   std::advance(itemsIT, selectedItem_ - 1 >= 0 ? selectedItem_ - 1 : 0);
 
    // print the options
    display().setTextColor(WHITE);
@@ -74,17 +74,20 @@ void AttributeChooserActivity::drawLayout()
                       display().width() - 36,
                       display().height() - titleBarHeight(),
                       BLACK);
-   for (int8_t i = 0; i < 4 && itemsIT != items.end(); i++)
+   for (int8_t i = 0; i < 4 && itemsIT != items_.end(); ++i)
    {
-      if (i != 0 || i == 0 && selectedItem != 0)
+      if (i != 0 || (i == 0 && selectedItem_ != 0))
       {  // skip the first position, when the first item is selected
          display().setCursor(36, yMiddle - 2 + (i - 1) * 14);
          display().print(itemsIT->title().c_str());
-         itemsIT++;
+         ++itemsIT;
       }
    }
 
-   display().display();
+   if (drawMode == DrawMode::TransferBuffer)
+   {
+      display().display();
+   }
 }
 
 }  // namespace ActivityGUI

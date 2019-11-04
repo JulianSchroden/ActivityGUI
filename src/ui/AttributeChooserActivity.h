@@ -35,12 +35,12 @@ public:
    void setResult(ByteStack &bytes) override;
 
 protected:
-   virtual void drawLayout();
+   void drawLayout(DrawMode drawMode = DrawMode::TransferBuffer) override;
 
 private:
-   std::vector<AttributeChoice> items;
-   int8_t selectedItem = 0;      // index of the selected item
-   int8_t lastSelectedItem = 0;  // index of the last selected item
+   std::vector<AttributeChoice> items_;
+   int8_t selectedItem_ = 0;      // index of the selected item
+   int8_t lastSelectedItem_ = 0;  // index of the last selected item
 };
 }  // namespace ActivityGUI
 
