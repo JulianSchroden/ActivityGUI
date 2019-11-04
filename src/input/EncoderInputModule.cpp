@@ -4,7 +4,8 @@
 
 namespace ActivityGUI
 {
-EncoderInputModule::EncoderInputModule(Button button, Encoder encoder)
+EncoderInputModule::EncoderInputModule(InputDevices::Button button,
+                                       InputDevices::Encoder encoder)
     : button_(std::move(button)), encoder_(std::move(encoder))
 {
    button_.onClick([this]() { onClick(); });
