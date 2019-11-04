@@ -76,7 +76,7 @@ void AttributeChooserActivity::drawLayout(DrawMode drawMode)
                       BLACK);
    for (int8_t i = 0; i < 4 && itemsIT != items_.end(); ++i)
    {
-      if (i != 0 || i == 0 && selectedItem_ != 0)
+      if (i != 0 || (i == 0 && selectedItem_ != 0))
       {  // skip the first position, when the first item is selected
          display().setCursor(36, yMiddle - 2 + (i - 1) * 14);
          display().print(itemsIT->title().c_str());

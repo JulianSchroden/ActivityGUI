@@ -88,7 +88,7 @@ void DurationChooserActivity::onScroll(int distance)
          else if (seconds_ >= 60)
          {
             seconds_ = seconds_ % 60;
-            if (hours_ != 23 && minutes_ != 59 || hours_ == 23 && minutes_ < 59)
+            if ((hours_ != 23 && minutes_ != 59) || (hours_ == 23 && minutes_ < 59))
             {
                ++minutes_;
                if (minutes_ >= 60)

@@ -126,7 +126,7 @@ void ListActivity::drawLayout(DrawMode drawMode)
           WHITE);
    }
 
-   drawselectionIndicator(DrawMode::BufferOnly);
+   drawSelectionIndicator(DrawMode::BufferOnly);
    drawScrollIndicator(DrawMode::BufferOnly);
    if (drawMode == DrawMode::TransferBuffer)
    {
@@ -180,7 +180,7 @@ void ListActivity::drawSelectionIndicator(DrawMode drawMode)
    // remove indicator of last selected item
    display().fillRect(
        6,
-       titleBarHeight() + lastselectionIndicator_ * listItemHeight_ + 4,
+       titleBarHeight() + lastSelectionIndicator_ * listItemHeight_ + 4,
        listItemHeight_ - 8,
        listItemHeight_ - 8,
        BLACK);
@@ -195,7 +195,7 @@ void ListActivity::drawSelectionIndicator(DrawMode drawMode)
    {
       display().display();
    }
-   lastselectionIndicator_ = selectionIndicator_;
+   lastSelectionIndicator_ = selectionIndicator_;
 }
 
 }  // namespace ActivityGUI
