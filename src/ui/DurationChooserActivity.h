@@ -30,16 +30,16 @@ public:
    void setResult(ByteStack &bytes) override;
 
 protected:
-   void drawLayout() override;
+   void drawLayout(DrawMode drawMode = DrawMode::TransferBuffer) override;
 
 private:
-   int8_t hours = 0;
-   int8_t minutes = 0;
-   int8_t seconds = 0;
+   int8_t hours_ = 0;
+   int8_t minutes_ = 0;
+   int8_t seconds_ = 0;
 
-   uint32_t duration;  // in seconds
+   uint32_t duration_;  // in seconds
 
-   uint8_t activeView = 0;  // index of the selected view
+   uint8_t activeView_ = 0;  // index of the selected view
 };
 }  // namespace ActivityGUI
 
