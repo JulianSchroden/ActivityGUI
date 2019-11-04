@@ -25,6 +25,12 @@ enum class UIFreezeIndicator
    Visible,
 };
 
+enum class DrawMode
+{
+   BufferOnly,
+   TransferBuffer,
+};
+
 class Activity
 {
 public:
@@ -112,45 +118,48 @@ protected:
 
 protected:
    //!
-   //!  Draw the activity layout.
-   //!  Needs to be implemented by all child classes.
+   //! Draw the activity layout.
+   //! Needs to be implemented by all child classes. The \a drawMode
+   //! parameter indicates whether the display buffer should be transferred to
+   //! the display.
    //!
-   virtual void drawLayout();
+   virtual void drawLayout(DrawMode drawMode = DrawMode::TransferBuffer);
 
    //!
    //! Draw the titlebar to the top of the display.
    //! Draw the \a title with the provided \a fontScale to the titlebar.
    //! If \a showArrowHome is set to true, a small arrow is drawn on the
-   //! titlebar to indicate that the activity has a parent one. The \a draw
-   //! boolean indicates whether the display buffer should be transferred to
+   //! titlebar to indicate that the activity has a parent one. The \a drawMode
+   //! parameter indicates whether the display buffer should be transferred to
    //! the display.
    //!
    void drawTitleBar(std::string title,
                      int fontScale,
                      bool showArrowHome,
-                     bool draw = false);
+                     DrawMode drawMode = DrawMode::TransferBuffer);
 
    //!
-   //! Clear the display
+   //! Clear the display.
    //! The display is filled with the provided \a color (BLACK|WHITE) and the \a
-   //! draw  boolean indicates whether the display buffer should be transferred
-   //! to the display.
+   //! drawMode parameter indicates whether the display buffer should be
+   //! transferred to the display.
    //!
-   void clearActivity(const int color = BLACK, boolean draw = true);
+   void clearActivity(const int color = BLACK,
+                      DrawMode drawMode = DrawMode::TransferBuffer);
 
 protected:
    //!
-   //! Get the activity title
+   //! Get the activity title.
    //!
    std::string title();
 
    //!
-   //! Get the titleBarHeight
+   //! Get the titleBarHeight.
    //!
    int titleBarHeight();
 
    //!
-   //! Set the UIFreezeIndicator
+   //! Set the UIFreezeIndicator.
    //! The \a uiFreezeIndicator can be set in advance of a blocking code block
    //! which will result in the ui not be responsive to the user's input.
    void setUIFreezeIndicator(UIFreezeIndicator uiFreezeIndicator);
