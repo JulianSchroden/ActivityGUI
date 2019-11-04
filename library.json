@@ -1,12 +1,12 @@
 {
-    "name": "Activity Runtime for Arduino",
+    "name": "ActivityGUI",
     "keywords": "oled, display, gui",
     "description": "Library to create interactive graphical user interfaces",
 
     "repository":
     {
         "type": "git",
-        "url": "https://github.com/JulianSchroden/activity-runtime-for-arduino.git"
+        "url": "https://github.com/JulianSchroden/ActivityGUI.git"
     },
     "license": "MIT",
 
