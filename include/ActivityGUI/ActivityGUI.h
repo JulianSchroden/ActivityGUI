@@ -9,6 +9,7 @@
 
 #include <Adafruit_SSD1306.h>
 #include <Arduino.h>
+#include <SimpleWorker/WorkerPool.h>
 
 #include <list>
 #include <memory>
@@ -56,9 +57,14 @@ public:
    void stopActivity();
 
    //!
-   //! Get a reference to the Adafruit_SSD1306 display instance
+   //! Get a reference to the Adafruit_SSD1306 display instance.
    //!
    Adafruit_SSD1306 &display();
+
+   //!
+   //! Get a reference to the WorkerPool.
+   //!
+   SimpleWorker::WorkerPool &workerPool();
 
 private:
    //!
@@ -71,6 +77,7 @@ private:
    std::unique_ptr<Adafruit_SSD1306> display_;
    ByteStack resultBytes_;
    std::stack<std::unique_ptr<ActivityExecution>> activityStack;
+   SimpleWorker::WorkerPool workerPool_;
 };
 }  // namespace ActivityGUI
 

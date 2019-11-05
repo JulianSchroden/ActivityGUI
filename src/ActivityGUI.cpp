@@ -42,6 +42,7 @@ Runtime::Runtime(std::unique_ptr<InputModule> inputModule,
 void Runtime::runOnce()
 {
    inputModule_->runOnce();
+   workerPool_.runOnce();
    yield();
 }
 
@@ -89,6 +90,11 @@ void Runtime::stopActivity()
 Adafruit_SSD1306 &Runtime::display()
 {
    return *display_.get();
+}
+
+SimpleWorker::WorkerPool &Runtime::workerPool()
+{
+   return workerPool_;
 }
 
 void Runtime::pushActivity(std::unique_ptr<ActivityExecution> activityExecution)
