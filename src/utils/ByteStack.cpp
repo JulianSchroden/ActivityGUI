@@ -4,7 +4,7 @@
  * full license information.
  */
 
-#include "ByteStack.h"
+#include <ActivityGUI/utils/ByteStack.h>
 
 #include <stdint.h>
 

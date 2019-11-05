@@ -4,9 +4,9 @@
  *  full license information.
  */
 
-#include "Activity.h"
-
 #include <ActivityGUI/ActivityGUI.h>
+#include <ActivityGUI/ui/Activity.h>
+
 #include "TextUtils.h"
 
 
