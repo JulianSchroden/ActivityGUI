@@ -48,14 +48,15 @@ void Runtime::runOnce()
 
 void Runtime::startActivity(std::unique_ptr<Activity> activity)
 {
-   pushActivity(std::make_unique<ActivityExecution>(std::move(activity)));
+   pushActivity(
+       std::make_unique<Runtime::ActivityExecution>(std::move(activity)));
 }
 
 void Runtime::startActivityForResult(std::unique_ptr<Activity> activity,
                                      uint8_t key)
 {
-   pushActivity(
-       std::make_unique<ActivityExecution>(std::move(activity), true, key));
+   pushActivity(std::make_unique<Runtime::ActivityExecution>(
+       std::move(activity), true, key));
 }
 
 void Runtime::stopActivity()
@@ -97,7 +98,31 @@ SimpleWorker::WorkerPool &Runtime::workerPool()
    return workerPool_;
 }
 
-void Runtime::pushActivity(std::unique_ptr<ActivityExecution> activityExecution)
+Runtime::ActivityExecution::ActivityExecution(
+    std::unique_ptr<Activity> activity, bool isResultExpected, uint8_t key)
+    : activity_(std::move(activity))
+    , isResultExpected_(isResultExpected)
+    , resultKey_(key)
+{
+}
+
+Activity *Runtime::ActivityExecution::activity() const
+{
+   return activity_.get();
+}
+
+bool Runtime::ActivityExecution::isResultExpected() const
+{
+   return isResultExpected_;
+}
+
+int8_t Runtime::ActivityExecution::resultKey() const
+{
+   return resultKey_;
+}
+
+void Runtime::pushActivity(
+    std::unique_ptr<Runtime::ActivityExecution> activityExecution)
 {
    if (!activityStack.empty())
    {

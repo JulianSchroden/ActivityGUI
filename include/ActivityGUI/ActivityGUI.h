@@ -7,6 +7,9 @@
 #ifndef _ACTIVITY_GUI_h
 #define _ACTIVITY_GUI_h
 
+#include <ActivityGUI/input/InputModule.h>
+#include <ActivityGUI/ui/Activity.h>
+#include <ActivityGUI/utils/ByteStack.h>
 #include <Adafruit_SSD1306.h>
 #include <Arduino.h>
 #include <SimpleWorker/WorkerPool.h>
@@ -14,11 +17,6 @@
 #include <list>
 #include <memory>
 #include <stack>
-
-#include "ActivityExecution.h"
-#include "input/InputModule.h"
-#include "ui/Activity.h"
-#include "utils/ByteStack.h"
 
 
 namespace ActivityGUI
@@ -68,15 +66,54 @@ public:
 
 private:
    //!
+   //! Helper class to manage the activity executions.
+   //!
+   class ActivityExecution
+   {
+   public:
+      //!
+      //! Create an ActivityExecution instance of the provided \a acitivity.
+      //! When the calling Activity expects a result, \a isResultExpected needs
+      //! to be set to true. The \a key is passed to the onActivityResult
+      //! function of the calling Activity, so it is easy to identify the
+      //! result.
+      //!
+      ActivityExecution(std::unique_ptr<Activity> activity,
+                        bool isResultExpected = false,
+                        uint8_t key = 0);
+
+      //!
+      //! Get a pointer to the activity.
+      //!
+      Activity *activity() const;
+
+      //!
+      //! Check if the activity should return a result.
+      //!
+      bool isResultExpected() const;
+
+      //!
+      //! Get the result key.
+      //!
+      int8_t resultKey() const;
+
+   private:
+      std::unique_ptr<Activity> activity_;
+      bool isResultExpected_;
+      uint8_t resultKey_;
+   };
+
+   //!
    //! Helper function which pushes the provided \a activityExecution on top of
    //! the stack
-   void pushActivity(std::unique_ptr<ActivityExecution> activityExecution);
+   void pushActivity(
+       std::unique_ptr<Runtime::ActivityExecution> activityExecution);
 
 private:
    std::unique_ptr<InputModule> inputModule_;
    std::unique_ptr<Adafruit_SSD1306> display_;
    ByteStack resultBytes_;
-   std::stack<std::unique_ptr<ActivityExecution>> activityStack;
+   std::stack<std::unique_ptr<Runtime::ActivityExecution>> activityStack;
    SimpleWorker::WorkerPool workerPool_;
 };
 }  // namespace ActivityGUI
