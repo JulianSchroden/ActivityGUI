@@ -7,7 +7,7 @@
 #ifndef _DURATION_CHOOSER_ACTIVITY_h
 #define _DURATION_CHOOSER_ACTIVITY_h
 
-#include "Activity.h"
+#include <ActivityGUI/ui/Activity.h>
 
 namespace ActivityGUI
 {

@@ -12,7 +12,7 @@
 
 #include <string>
 
-#include "../utils/ByteStack.h"
+#include <ActivityGUI/utils/ByteStack.h>
 
 
 namespace ActivityGUI

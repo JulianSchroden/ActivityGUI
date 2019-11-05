@@ -30,6 +30,10 @@
         {
             "name": "InputDevices",
             "version": "https://github.com/JulianSchroden/InputDevices.git"
+        },
+        {
+            "name": "SimpleWorker",
+            "version": "https://github.com/JulianSchroden/SimpleWorker.git"
         }
     ]
 }

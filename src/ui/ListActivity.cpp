@@ -4,7 +4,8 @@
  *  full license information.
  */
 
-#include "ListActivity.h"
+#include <ActivityGUI/ui/ListActivity.h>
+#include "TextUtils.h"
 
 #include "../utils/Logger.h"
 
@@ -18,6 +19,7 @@ ListActivity::ListActivity(std::vector<std::string> items,
                            bool showArrowHome)
     : Activity(std::move(title), showTitleBar, titleFontScale, showArrowHome)
     , listItems_(std::move(items))
+    , listItemHeight_(TextUtils::getTextBounds("T", 1).getHeight() + 5)
 {
 }
 

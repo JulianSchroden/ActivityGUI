@@ -4,7 +4,7 @@
  *  full license information.
  */
 
-#include "ActivityGUI.h"
+#include <ActivityGUI/ActivityGUI.h>
 
 #include "shim/make_unique.h"
 
@@ -42,44 +42,21 @@ Runtime::Runtime(std::unique_ptr<InputModule> inputModule,
 void Runtime::runOnce()
 {
    inputModule_->runOnce();
-
-#if 0
-   // execute the workers in the workerList
-   if (workerList.size() > 0)
-   {
-      std::list<Worker *>::iterator workerIt = workerList.begin();
-      while (workerIt != workerList.end())
-      {
-         switch ((*workerIt)->getState())
-         {  // check the worker's state
-            case Worker::STATE_RUNNING:
-               (*workerIt)->runOnce();  // call runOnce callback
-               workerIt++;
-               break;
-            case Worker::STATE_TERMINATED:
-               workerList.erase(
-                   workerIt++);  // remove worker once it has been terminated
-               break;
-            default:
-               workerIt++;
-               break;
-         }
-      }
-   }
-#endif
+   workerPool_.runOnce();
    yield();
 }
 
 void Runtime::startActivity(std::unique_ptr<Activity> activity)
 {
-   pushActivity(std::make_unique<ActivityExecution>(std::move(activity)));
+   pushActivity(
+       std::make_unique<Runtime::ActivityExecution>(std::move(activity)));
 }
 
 void Runtime::startActivityForResult(std::unique_ptr<Activity> activity,
                                      uint8_t key)
 {
-   pushActivity(
-       std::make_unique<ActivityExecution>(std::move(activity), true, key));
+   pushActivity(std::make_unique<Runtime::ActivityExecution>(
+       std::move(activity), true, key));
 }
 
 void Runtime::stopActivity()
@@ -111,17 +88,41 @@ void Runtime::stopActivity()
    }
 }
 
-void Runtime::addWorker(Worker *const worker)
-{
-   workerList.push_back(worker);
-}
-
 Adafruit_SSD1306 &Runtime::display()
 {
    return *display_.get();
 }
 
-void Runtime::pushActivity(std::unique_ptr<ActivityExecution> activityExecution)
+SimpleWorker::WorkerPool &Runtime::workerPool()
+{
+   return workerPool_;
+}
+
+Runtime::ActivityExecution::ActivityExecution(
+    std::unique_ptr<Activity> activity, bool isResultExpected, uint8_t key)
+    : activity_(std::move(activity))
+    , isResultExpected_(isResultExpected)
+    , resultKey_(key)
+{
+}
+
+Activity *Runtime::ActivityExecution::activity() const
+{
+   return activity_.get();
+}
+
+bool Runtime::ActivityExecution::isResultExpected() const
+{
+   return isResultExpected_;
+}
+
+int8_t Runtime::ActivityExecution::resultKey() const
+{
+   return resultKey_;
+}
+
+void Runtime::pushActivity(
+    std::unique_ptr<Runtime::ActivityExecution> activityExecution)
 {
    if (!activityStack.empty())
    {

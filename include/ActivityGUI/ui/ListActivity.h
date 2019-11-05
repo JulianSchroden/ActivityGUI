@@ -9,8 +9,7 @@
 
 #include <vector>
 
-#include "Activity.h"
-#include "TextUtils.h"
+#include <ActivityGUI/ui/Activity.h>
 
 
 namespace ActivityGUI
@@ -70,7 +69,7 @@ private:
    int visibleItemCount_;  // number of list items, which fit on the screen
 
    // repeatedly used constants to draw the layout
-   int listItemHeight_ = TextUtils::getTextBounds("T", 1).getHeight() + 5;
+   int listItemHeight_;
    const int scrollBarWidth_ = 7;
    const int indicatorWidth_ = 3;
    const int indicatorHeight_ = 6;
