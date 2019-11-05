@@ -1,11 +1,9 @@
 #ifndef _ENCODER_INPUT_MODULE_h
 #define _ENCODER_INPUT_MODULE_h
 
+#include <ActivityGUI/input/InputModule.h>
 #include <InputDevices/Button.h>
 #include <InputDevices/Encoder.h>
-
-#include "InputModule.h"
-
 
 namespace ActivityGUI
 {

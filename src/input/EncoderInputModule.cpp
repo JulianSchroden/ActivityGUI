@@ -1,4 +1,4 @@
-#include "EncoderInputModule.h"
+#include <ActivityGUI/input/EncoderInputModule.h>
 
 #include <Arduino.h>
 

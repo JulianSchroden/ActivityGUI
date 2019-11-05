@@ -4,7 +4,7 @@
  *  full license information.
  */
 
-#include "ActivityGUI.h"
+#include <ActivityGUI/ActivityGUI.h>
 
 #include "shim/make_unique.h"
 

@@ -7,11 +7,10 @@
 #ifndef _ATTRIBUTE_CHOOSER_ACTIVITY_h
 #define _ATTRIBUTE_CHOOSER_ACTIVITY_h
 
+#include <ActivityGUI/ui/Activity.h>
+#include <ActivityGUI/utils/AttributeChoice.h>
+
 #include <vector>
-
-#include "../utils/AttributeChoice.h"
-#include "Activity.h"
-
 
 namespace ActivityGUI
 {

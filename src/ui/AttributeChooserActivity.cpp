@@ -4,7 +4,7 @@
  *  full license information.
  */
 
-#include "AttributeChooserActivity.h"
+#include <ActivityGUI/ui/AttributeChooserActivity.h>
 
 #include "../utils/Logger.h"
 

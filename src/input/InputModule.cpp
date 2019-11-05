@@ -1,4 +1,4 @@
-#include "InputModule.h"
+#include <ActivityGUI/input/InputModule.h>
 
 namespace ActivityGUI
 {

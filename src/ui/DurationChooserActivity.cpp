@@ -1,10 +1,10 @@
 /**
- *  Copyright (c) 2017-2018 Julian Schroden. All rights reserved.
+ *  Copyright (c) 2017-2019 Julian Schroden. All rights reserved.
  *  Licensed under the MIT License. See LICENSE file in the project root for
  * full license information.
  */
 
-#include "DurationChooserActivity.h"
+#include <ActivityGUI/ui/DurationChooserActivity.h>
 
 namespace ActivityGUI
 {

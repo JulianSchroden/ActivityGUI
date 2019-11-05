@@ -6,7 +6,7 @@
 
 #include "Activity.h"
 
-#include "../ActivityGUI.h"
+#include <ActivityGUI/ActivityGUI.h>
 #include "TextUtils.h"
 
 
