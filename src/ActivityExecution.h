@@ -9,7 +9,7 @@
 
 #include <memory>
 
-#include "ui/Activity.h"
+#include <ActivityGUI/ui/Activity.h>
 
 
 namespace ActivityGUI

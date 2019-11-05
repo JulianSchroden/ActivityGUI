@@ -15,7 +15,6 @@
 #include <stack>
 
 #include "ActivityExecution.h"
-#include "Worker.h"
 #include "input/InputModule.h"
 #include "ui/Activity.h"
 #include "utils/ByteStack.h"
@@ -57,11 +56,6 @@ public:
    void stopActivity();
 
    //!
-   //! Add a \a worker to the workerlist
-   //!
-   void addWorker(Worker *const worker);
-
-   //!
    //! Get a reference to the Adafruit_SSD1306 display instance
    //!
    Adafruit_SSD1306 &display();
@@ -77,7 +71,6 @@ private:
    std::unique_ptr<Adafruit_SSD1306> display_;
    ByteStack resultBytes_;
    std::stack<std::unique_ptr<ActivityExecution>> activityStack;
-   std::list<Worker *> workerList;
 };
 }  // namespace ActivityGUI
 

@@ -42,31 +42,6 @@ Runtime::Runtime(std::unique_ptr<InputModule> inputModule,
 void Runtime::runOnce()
 {
    inputModule_->runOnce();
-
-#if 0
-   // execute the workers in the workerList
-   if (workerList.size() > 0)
-   {
-      std::list<Worker *>::iterator workerIt = workerList.begin();
-      while (workerIt != workerList.end())
-      {
-         switch ((*workerIt)->getState())
-         {  // check the worker's state
-            case Worker::STATE_RUNNING:
-               (*workerIt)->runOnce();  // call runOnce callback
-               workerIt++;
-               break;
-            case Worker::STATE_TERMINATED:
-               workerList.erase(
-                   workerIt++);  // remove worker once it has been terminated
-               break;
-            default:
-               workerIt++;
-               break;
-         }
-      }
-   }
-#endif
    yield();
 }
 
@@ -109,11 +84,6 @@ void Runtime::stopActivity()
       }
       activityStack.top()->activity()->onResume();
    }
-}
-
-void Runtime::addWorker(Worker *const worker)
-{
-   workerList.push_back(worker);
 }
 
 Adafruit_SSD1306 &Runtime::display()
